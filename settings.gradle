@@ -1,3 +1,6 @@
+include ':lib-extensions'
+include ':lib-delegate-adapter'
+include ':proxy-settings'
 include ':authorization'
 include ':app'
 rootProject.name = "LinkedOut"
