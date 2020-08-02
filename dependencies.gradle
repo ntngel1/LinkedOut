@@ -10,6 +10,8 @@ ext {
             constraintlayout: "androidx.constraintlayout:constraintlayout:1.1.3",
 
             hilt: "com.google.dagger:hilt-android:$hilt_version",
-            hilt_compiler: "com.google.dagger:hilt-android-compiler:$hilt_version"
+            hilt_compiler: "com.google.dagger:hilt-android-compiler:$hilt_version",
+
+            cicerone: "ru.terrakok.cicerone:cicerone:5.1.1"
     ]
 }
