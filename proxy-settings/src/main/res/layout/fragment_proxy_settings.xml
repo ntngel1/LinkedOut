@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/material_toolbar_proxy_settings"
+        style="@style/Toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="?actionBarSize"
+        app:title="@string/proxy_settings" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_proxy_settings"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

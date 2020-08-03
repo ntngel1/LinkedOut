@@ -1,4 +1,6 @@
-include ':lib-extensions'
+include ':lib-ui'
+include ':lib-styling'
+include ':lib-utils'
 include ':lib-delegate-adapter'
 include ':proxy-settings'
 include ':authorization'

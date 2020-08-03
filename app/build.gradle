@@ -16,10 +16,31 @@ android {
         versionName "1.0"
     }
 
+    signingConfigs {
+        debug {
+            storeFile file('../debug.keystore')
+            storePassword 'android'
+            keyAlias 'android'
+            keyPassword 'android'
+        }
+
+        release {
+            storeFile file('../debug.keystore')
+            storePassword 'android'
+            keyAlias 'android'
+            keyPassword 'android'
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            signingConfig signingConfigs.debug
         }
     }
 }
@@ -28,6 +49,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     implementation features.authorization
+    implementation features.proxy_settings
 
     implementation libs.stdlib
     implementation libs.core_ktx
@@ -35,6 +57,7 @@ dependencies {
     implementation libs.appcompat
     implementation libs.constraintlayout
     implementation libs.cicerone
+    implementation libs.utils
 
     implementation libs.hilt
     kapt libs.hilt_compiler

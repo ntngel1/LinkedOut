@@ -21,7 +21,6 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation libs.stdlib
-    implementation libs.core_ktx
     implementation libs.appcompat
-    implementation libs.utils
+    implementation libs.material
 }

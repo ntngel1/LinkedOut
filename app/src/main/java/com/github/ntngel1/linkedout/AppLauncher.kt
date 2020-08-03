@@ -8,6 +8,6 @@ class AppLauncher @Inject constructor(
 ) {
 
     fun coldStart() {
-        router.newRootScreen(Screens.AuthorizationFlow)
+        router.newRootScreen(Screens.ProxySettings)
     }
 }

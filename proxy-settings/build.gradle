@@ -5,6 +5,11 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 29
 
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 29
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -20,6 +25,9 @@ dependencies {
     implementation libs.appcompat
     implementation libs.material
     implementation libs.recyclerview
+
+    implementation libs.styling
     implementation libs.delegate_adapter
     implementation libs.utils
+    implementation libs.ui
 }
