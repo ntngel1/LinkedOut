@@ -52,13 +52,19 @@ dependencies {
     implementation features.proxy_settings
 
     implementation libs.stdlib
+    implementation libs.utils
+
     implementation libs.core_ktx
+    implementation libs.lifecycle_viewmodel_ktx
     implementation libs.material
     implementation libs.appcompat
     implementation libs.constraintlayout
     implementation libs.cicerone
-    implementation libs.utils
+    implementation libs.gson
+    implementation libs.okhttp
 
     implementation libs.hilt
+    implementation libs.hilt_viewmodel
     kapt libs.hilt_compiler
+    kapt libs.hilt_viewmodel_compiler
 }

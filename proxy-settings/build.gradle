@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -16,18 +17,39 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+androidExtensions {
+    experimental = true
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation libs.stdlib
-    implementation libs.core_ktx
-    implementation libs.appcompat
-    implementation libs.material
-    implementation libs.recyclerview
 
+    implementation libs.ui
+    implementation libs.utils
     implementation libs.styling
     implementation libs.delegate_adapter
-    implementation libs.utils
-    implementation libs.ui
+
+    implementation libs.core_ktx
+    implementation libs.fragment_ktx
+    implementation libs.lifecycle_viewmodel_ktx
+
+    implementation libs.material
+    implementation libs.appcompat
+    implementation libs.recyclerview
+    implementation libs.gson
+    implementation libs.okhttp
+    implementation libs.coroutines
+
+    implementation libs.hilt
+    kapt libs.hilt_compiler
+
+    implementation libs.hilt_viewmodel
+    kapt libs.hilt_viewmodel_compiler
 }
