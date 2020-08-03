@@ -6,13 +6,17 @@
 
 package com.github.ntngel1.linkedout.lib_delegate_adapter
 
-sealed class Callback<R> {
+sealed class Callback {
 
-    abstract val listener: () -> R
+    abstract val listener: () -> Unit
 
-    data class Hashable<R>(
-        override val listener: () -> R
-    ) : Callback<R>() {
+    operator fun invoke() {
+        listener.invoke()
+    }
+
+    data class Hashable(
+        override val listener: () -> Unit
+    ) : Callback() {
 
         override fun equals(other: Any?): Boolean {
             return false
@@ -23,9 +27,44 @@ sealed class Callback<R> {
         }
     }
 
-    data class NonHashable<R>(
-        override val listener: () -> R
-    ) : Callback<R>() {
+    data class NonHashable(
+        override val listener: () -> Unit
+    ) : Callback() {
+
+        override fun equals(other: Any?): Boolean {
+            return other !is Hashable
+        }
+
+        override fun hashCode(): Int {
+            return listener.hashCode()
+        }
+    }
+}
+
+sealed class Callback1<T1> {
+
+    abstract val listener: (T1) -> Unit
+
+    operator fun invoke(t1: T1) {
+        listener.invoke(t1)
+    }
+
+    data class Hashable<T1>(
+        override val listener: (T1) -> Unit
+    ) : Callback1<T1>() {
+
+        override fun equals(other: Any?): Boolean {
+            return false
+        }
+
+        override fun hashCode(): Int {
+            return listener.hashCode()
+        }
+    }
+
+    data class NonHashable<T1>(
+        override val listener: (T1) -> Unit
+    ) : Callback1<T1>() {
 
         override fun equals(other: Any?): Boolean {
             return other !is Hashable<*>
@@ -37,55 +76,32 @@ sealed class Callback<R> {
     }
 }
 
-sealed class Callback1<T1, R> {
-
-    abstract val listener: (T1) -> R
-
-    data class Hashable<T1, R>(
-        override val listener: (T1) -> R
-    ) : Callback1<T1, R>() {
-
-        override fun equals(other: Any?): Boolean {
-            return false
-        }
-
-        override fun hashCode(): Int {
-            return listener.hashCode()
-        }
-    }
-
-    data class NonHashable<T1, R>(
-        override val listener: (T1) -> R
-    ) : Callback1<T1, R>() {
-
-        override fun equals(other: Any?): Boolean {
-            return other !is Hashable<*, *>
-        }
-
-        override fun hashCode(): Int {
-            return listener.hashCode()
-        }
-    }
-}
-
-fun <R> callback(hashable: Boolean = false, listener: () -> R) =
-    if (hashable) {
-        Callback.Hashable(
-            listener
-        )
-    } else {
+/**
+ * @param static if false, item will be bound again even if no fields' values changed
+ *               else if true, item will not be bound again if just callback changed
+ */
+fun callback(static: Boolean = false, listener: () -> Unit) =
+    if (static) {
         Callback.NonHashable(
             listener
         )
+    } else {
+        Callback.Hashable(
+            listener
+        )
     }
 
-fun <T1, R> callback1(hashable: Boolean = false, listener: (T1) -> R) =
-    if (hashable) {
-        Callback1.Hashable(
+/**
+ * @param static if false, item will be bound again even if no fields' values changed
+ *               else if true, item will not be bound again if just callback changed
+ */
+fun <T1> callback1(static: Boolean = false, listener: (T1) -> Unit) =
+    if (static) {
+        Callback1.NonHashable(
             listener
         )
     } else {
-        Callback1.NonHashable(
+        Callback1.Hashable(
             listener
         )
     }

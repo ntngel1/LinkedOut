@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import dagger.hilt.android.AndroidEntryPoint
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 
-@AndroidEntryPoint
 abstract class BaseFragment : Fragment() {
 
     @get:LayoutRes
@@ -19,4 +19,10 @@ abstract class BaseFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(layoutId, container, false)
+
+    protected fun <T> LiveData<T>.observe(observer: (T) -> Unit) {
+        this.observe(viewLifecycleOwner, Observer {
+            observer.invoke(it)
+        })
+    }
 }

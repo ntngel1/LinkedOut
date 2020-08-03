@@ -6,15 +6,12 @@
 
 package com.github.ntngel1.linkedout.lib_delegate_adapter.core
 
-import android.view.View
+import android.content.Context
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import kotlinx.android.extensions.LayoutContainer
 
-abstract class Item<T : Item<T>> : LayoutContainer {
-
-    /** overring this property from [LayoutContainer] to enable view caching */
-    override var containerView: View? = null
+abstract class Item<T : Item<T>> {
 
     abstract val id: String
 
@@ -24,17 +21,31 @@ abstract class Item<T : Item<T>> : LayoutContainer {
     val viewType: Int
         get() = layoutId
 
+    /**
+     * Make sure you call super.bind(view, viewStateStore) at the end of the method.
+     * If you call this right before your own code, it can cause incorrect state restoring
+     */
     @CallSuper
-    open fun bind(view: View) {
-        containerView = view
+    open fun bind(layout: LayoutContainer, viewStateStore: ViewStateStore) {
+        restoreState(layout, viewStateStore)
     }
 
     open fun areContentsTheSame(previousItem: T) = equals(previousItem)
 
-    open fun bind(previousItem: T, view: View) = bind(view)
+    open fun bind(previousItem: T, layout: LayoutContainer, viewStateStore: ViewStateStore) {
+        saveState(layout, viewStateStore)
+        bind(layout, viewStateStore)
+    }
 
     @CallSuper
-    open fun recycle(view: View) {
-        containerView = null
+    open fun recycle(layout: LayoutContainer, viewStateStore: ViewStateStore) {
+        saveState(layout, viewStateStore)
     }
+
+    open fun saveState(layout: LayoutContainer, viewStateStore: ViewStateStore) {}
+    open fun restoreState(layout: LayoutContainer, viewStateStore: ViewStateStore) {}
+
+    // Extension property for easier accessing Context
+    protected val LayoutContainer.context: Context
+        get() = containerView!!.context
 }

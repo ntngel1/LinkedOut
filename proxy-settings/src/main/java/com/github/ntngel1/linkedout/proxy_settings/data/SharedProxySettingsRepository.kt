@@ -22,7 +22,7 @@ class SharedProxySettingsRepository @Inject constructor(
             }
     }
 
-    override suspend fun obtain(): ProxySettingsEntity? {
+    override suspend fun get(): ProxySettingsEntity? {
         return cachedProxySettings
     }
 

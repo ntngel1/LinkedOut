@@ -10,14 +10,15 @@ class GetProxySettingsUseCaseImp @Inject constructor(
 ) : GetProxySettingsUseCase {
 
     override suspend fun invoke(): ProxySettingsEntity {
-        return proxySettingsRepository.obtain()
+        return proxySettingsRepository.get()
             ?: DEFAULT_PROXY_SETTINGS
     }
 
     companion object {
         private val DEFAULT_PROXY_SETTINGS = ProxySettingsEntity(
             proxyType = ProxyType.DIRECT,
-            proxyHostname = null
+            proxyHostname = null,
+            proxyPort = null
         )
     }
 }

@@ -23,6 +23,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemHolder> {
     private ArrayList<Item> items = new ArrayList<>();
 
     @NonNull
+    private ViewStateStore viewStateStore = new HashMapViewStateStore();
+
+    @NonNull
     @Override
     public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -35,7 +38,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemHolder> {
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
         Item item = items.get(position);
 
-        item.bind(holder.itemView);
+        item.bind(holder, viewStateStore);
         holder.setItem(item);
     }
 
@@ -47,14 +50,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemHolder> {
             Item newItem = items.get(position);
             Item previousItem = (Item) payloads.get(payloads.size() - 1);
 
-            newItem.bind(previousItem, holder.itemView);
+            newItem.bind(previousItem, holder, viewStateStore);
             holder.setItem(newItem);
         }
     }
 
     @Override
     public void onViewRecycled(@NonNull ItemHolder holder) {
-        holder.getItem().recycle(holder.itemView);
+        holder.getItem().recycle(holder, viewStateStore);
         holder.setItem(null);
     }
 
