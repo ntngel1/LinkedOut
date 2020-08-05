@@ -94,10 +94,7 @@ fun RecyclerView.render(
             itemAdapter
         }
 
-    adapter.items = ItemsBuilder(
-        dividerItemDecoration,
-        spacingItemDecoration
-    )
+    adapter.items = ItemsBuilder(dividerItemDecoration, spacingItemDecoration)
         .apply(builder)
         .build()
 }

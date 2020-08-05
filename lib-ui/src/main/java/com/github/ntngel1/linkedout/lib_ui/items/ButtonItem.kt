@@ -16,19 +16,30 @@ data class ButtonItem(
     override val layoutId: Int
         get() = R.layout.item_button
 
-    override fun bind(layout: LayoutContainer, viewStateStore: ViewStateStore) {
-        with(layout.containerView as MaterialButton) {
-            text = this@ButtonItem.text
-            setOnClickListener {
-                onClicked.invoke()
-            }
-        }
-
-        super.bind(layout, viewStateStore)
+    override fun bind(layout: LayoutContainer) {
+        val button = layout.containerView as MaterialButton
+        bindText(button)
+        bindListeners(button)
     }
 
-    override fun recycle(layout: LayoutContainer, viewStateStore: ViewStateStore) {
-        super.recycle(layout, viewStateStore)
+    override fun bind(previousItem: ButtonItem, layout: LayoutContainer) {
+        val button = layout.containerView as MaterialButton
+        if (text != previousItem.text) {
+            bindText(button)
+        }
+    }
+
+    override fun recycle(layout: LayoutContainer) {
         layout.containerView?.setOnClickListener(null)
+    }
+
+    private fun bindText(button: MaterialButton) {
+        button.text = text
+    }
+
+    private fun bindListeners(button: MaterialButton) {
+        button.setOnClickListener {
+            onClicked.invoke()
+        }
     }
 }

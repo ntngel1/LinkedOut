@@ -11,7 +11,7 @@ import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import kotlinx.android.extensions.LayoutContainer
 
-abstract class Item<T : Item<T>> {
+abstract class   Item<T : Item<T>> {
 
     abstract val id: String
 
@@ -21,31 +21,22 @@ abstract class Item<T : Item<T>> {
     val viewType: Int
         get() = layoutId
 
-    /**
-     * Make sure you call super.bind(view, viewStateStore) at the end of the method.
-     * If you call this right before your own code, it can cause incorrect state restoring
-     */
-    @CallSuper
-    open fun bind(layout: LayoutContainer, viewStateStore: ViewStateStore) {
-        restoreState(layout, viewStateStore)
-    }
-
-    open fun areContentsTheSame(previousItem: T) = equals(previousItem)
-
-    open fun bind(previousItem: T, layout: LayoutContainer, viewStateStore: ViewStateStore) {
-        saveState(layout, viewStateStore)
-        bind(layout, viewStateStore)
-    }
-
-    @CallSuper
-    open fun recycle(layout: LayoutContainer, viewStateStore: ViewStateStore) {
-        saveState(layout, viewStateStore)
-    }
+    open fun bind(layout: LayoutContainer) {}
+    open fun bind(previousItem: T, layout: LayoutContainer) {}
+    open fun recycle(layout: LayoutContainer) {}
 
     open fun saveState(layout: LayoutContainer, viewStateStore: ViewStateStore) {}
     open fun restoreState(layout: LayoutContainer, viewStateStore: ViewStateStore) {}
 
-    // Extension property for easier accessing Context
+    open fun areContentsTheSame(previousItem: T) = equals(previousItem)
+
+    // Extensions
+
+    /** For easier accessing Context through LayoutContainer */
     protected val LayoutContainer.context: Context
         get() = containerView!!.context
+
+    fun <T> ViewStateStore.get(key: String): T? = get(id, key)
+
+    fun <T> ViewStateStore.put(key: String, value: T?) = put(id, key, value)
 }

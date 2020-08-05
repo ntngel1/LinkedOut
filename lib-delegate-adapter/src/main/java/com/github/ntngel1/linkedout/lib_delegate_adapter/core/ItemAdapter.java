@@ -38,7 +38,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemHolder> {
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
         Item item = items.get(position);
 
-        item.bind(holder, viewStateStore);
+        item.bind(holder);
+        item.restoreState(holder, viewStateStore);
         holder.setItem(item);
     }
 
@@ -50,14 +51,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemHolder> {
             Item newItem = items.get(position);
             Item previousItem = (Item) payloads.get(payloads.size() - 1);
 
-            newItem.bind(previousItem, holder, viewStateStore);
+            newItem.saveState(holder, viewStateStore);
+            newItem.bind(previousItem, holder);
+            newItem.restoreState(holder, viewStateStore);
             holder.setItem(newItem);
         }
     }
 
     @Override
     public void onViewRecycled(@NonNull ItemHolder holder) {
-        holder.getItem().recycle(holder, viewStateStore);
+        holder.getItem().saveState(holder, viewStateStore);
+        holder.getItem().recycle(holder);
         holder.setItem(null);
     }
 

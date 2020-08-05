@@ -15,7 +15,6 @@ import okhttp3.*
 import java.io.IOException
 
 class ProxySettingsViewModel @ViewModelInject constructor(
-    private val okHttpClient: OkHttpClient,
     private val getProxySettings: GetProxySettingsUseCase
 ) : BaseViewModel() {
 
@@ -28,7 +27,8 @@ class ProxySettingsViewModel @ViewModelInject constructor(
 
     private fun loadProxySettings() = viewModelScope.launch {
         val proxySettings = getProxySettings()
-        _state.value = ProxySettingsState(savedProxySettings = proxySettings, isProxyInputsVisible = true)
+        _state.value =
+            ProxySettingsState(savedProxySettings = proxySettings, isProxyInputsVisible = true)
     }
 
     fun onProxyTypeChanged(proxyTypeString: String) {
@@ -53,5 +53,28 @@ class ProxySettingsViewModel @ViewModelInject constructor(
             isSaveButtonVisible = newProxySettings != _state.value!!.savedProxySettings,
             newProxySettings = newProxySettings
         )
+    }
+
+    fun onProxyPortChanged(port: CharSequence) {
+        val portInt = port.toString().toIntOrNull()
+            ?: 0
+
+        val newProxySettings = _state.value!!.newProxySettings!!.copy(
+            proxyPort = when {
+                portInt < MIN_PORT -> MIN_PORT
+                portInt > MAX_PORT -> MAX_PORT
+                else -> portInt
+            }
+        )
+
+        _state.value = _state.value!!.copy(
+            isSaveButtonVisible = newProxySettings != _state.value!!.savedProxySettings,
+            newProxySettings = newProxySettings
+        )
+    }
+
+    companion object {
+        private const val MIN_PORT = 1
+        private const val MAX_PORT = 65535
     }
 }

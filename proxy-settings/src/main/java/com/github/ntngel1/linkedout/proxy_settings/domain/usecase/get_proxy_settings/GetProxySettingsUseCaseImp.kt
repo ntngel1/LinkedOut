@@ -18,7 +18,7 @@ class GetProxySettingsUseCaseImp @Inject constructor(
         private val DEFAULT_PROXY_SETTINGS = ProxySettingsEntity(
             proxyType = ProxyType.DIRECT,
             proxyHostname = null,
-            proxyPort = null
+            proxyPort = 1
         )
     }
 }
