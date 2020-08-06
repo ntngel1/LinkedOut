@@ -6,7 +6,12 @@
     <string name="proxy_settings_proxy_type_no_proxy">No proxy</string>
     <string name="proxy_settings_proxy_type_http">HTTP</string>
     <string name="proxy_settings_proxy_type_socks">SOCKS</string>
+    <string name="proxy_settings_proxy_type_mt_proto">MTProto</string>
 
     <string name="proxy_settings_hostname">Hostname</string>
     <string name="proxy_settings_port">Port</string>
+    <string name="proxy_settings_username">Username</string>
+    <string name="proxy_settings_password">Password</string>
+    <string name="proxy_settings_secret">Secret</string>
+    <string name="proxy_settings_ping_proxy">Ping proxy</string>
 </resources>

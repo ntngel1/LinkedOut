@@ -1,8 +1,7 @@
 package com.github.ntngel1.linkedout.proxy_settings.di
 
-import com.github.ntngel1.linkedout.proxy_settings.SettingsBasedProxySelector
 import com.github.ntngel1.linkedout.proxy_settings.data.NetworkPingRepository
-import com.github.ntngel1.linkedout.proxy_settings.data.SharedProxySettingsRepository
+import com.github.ntngel1.linkedout.proxy_settings.data.ProxySettingsRepositoryImp
 import com.github.ntngel1.linkedout.proxy_settings.domain.repository.PingRepository
 import com.github.ntngel1.linkedout.proxy_settings.domain.repository.ProxySettingsRepository
 import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.check_connection_quality.CheckConnectionQualityUseCase
@@ -20,11 +19,8 @@ import java.net.ProxySelector
 abstract class ProxySettingsModule {
 
     @Binds
-    abstract fun bindProxySelector(settingsBasedProxySelector: SettingsBasedProxySelector): ProxySelector
-
-    @Binds
     abstract fun bindProxySettingsRepository(
-        sharedProxySettingsRepository: SharedProxySettingsRepository
+        proxySettingsRepositoryImp: ProxySettingsRepositoryImp
     ): ProxySettingsRepository
 
     @Binds

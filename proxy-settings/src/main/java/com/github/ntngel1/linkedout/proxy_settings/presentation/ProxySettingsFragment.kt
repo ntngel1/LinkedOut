@@ -54,14 +54,16 @@ class ProxySettingsFragment : BaseFragment() {
                 entries = listOf(
                     string(R.string.proxy_settings_proxy_type_no_proxy),
                     string(R.string.proxy_settings_proxy_type_http),
-                    string(R.string.proxy_settings_proxy_type_socks)
+                    string(R.string.proxy_settings_proxy_type_socks),
+                    string(R.string.proxy_settings_proxy_type_mt_proto)
                 ),
                 selectedEntryIndex = proxyType.ordinal,
                 onEntrySelected = callback2(static = true) { _, proxyTypeIndex ->
                     val proxyType = when (proxyTypeIndex) {
                         0 -> ProxyType.NO_PROXY
                         1 -> ProxyType.HTTP
-                        2 -> ProxyType.SOCKS
+                        2 -> ProxyType.SOCKS5
+                        3 -> ProxyType.MT_PROTO
                         else -> throw IllegalStateException("No such ProxyType value for index $proxyTypeIndex")
                     }
 
@@ -72,7 +74,7 @@ class ProxySettingsFragment : BaseFragment() {
             spacing(8.dp)
         }
 
-        if (state.isProxyInputsVisible) {
+        if (state.isHostnameAndPortInputsVisible) {
             TextInputItem(
                 id = "proxy_hostname_text_input",
                 hint = string(R.string.proxy_settings_hostname),
@@ -94,6 +96,63 @@ class ProxySettingsFragment : BaseFragment() {
                 text = state.newProxyPort?.toString().orEmpty(),
                 cursorPosition = state.portCursorPosition,
                 onTextChanged = callback2(static = true, listener = viewModel::onProxyPortChanged)
+            ).render()
+
+            spacing(8.dp)
+        }
+
+        if (state.isUsernameAndPasswordInputsVisible) {
+            TextInputItem(
+                id = "proxy_username_text_input",
+                hint = string(R.string.proxy_settings_username),
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS,
+                text = state.newProxyUsername.orEmpty(),
+                cursorPosition = state.usernameCursorPosition,
+                onTextChanged = callback2(
+                    static = true,
+                    listener = viewModel::onProxyUsernameChanged
+                )
+            ).render()
+
+            spacing(8.dp)
+
+            TextInputItem(
+                id = "proxy_password_text_input",
+                hint = string(R.string.proxy_settings_password),
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD,
+                text = state.newProxyPassword.orEmpty(),
+                cursorPosition = state.passwordCursorPosition,
+                onTextChanged = callback2(
+                    static = true,
+                    listener = viewModel::onProxyPasswordChanged
+                )
+            ).render()
+
+            spacing(8.dp)
+        }
+
+        if (state.isSecretInputVisible) {
+            TextInputItem(
+                id = "proxy_secret_text_input",
+                hint = string(R.string.proxy_settings_secret),
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD,
+                text = state.newProxySecret.orEmpty(),
+                cursorPosition = state.secretCursorPosition,
+                onTextChanged = callback2(
+                    static = true,
+                    listener = viewModel::onProxySecretChanged
+                )
+            ).render()
+
+            spacing(8.dp)
+        }
+
+        if (state.isPingProxyButtonVisible) {
+            ButtonItem(
+                id = "ping_proxy_button",
+                text = string(R.string.proxy_settings_ping_proxy),
+                style = ButtonItem.Style.OUTLINED,
+                onClicked = callback(static = true, listener = viewModel::onPingProxyClicked)
             ).render()
 
             spacing(8.dp)

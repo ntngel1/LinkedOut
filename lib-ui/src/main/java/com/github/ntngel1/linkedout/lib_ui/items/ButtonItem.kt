@@ -10,11 +10,20 @@ import kotlinx.android.extensions.LayoutContainer
 data class ButtonItem(
     override val id: String,
     val text: String,
-    val onClicked: Callback
+    val onClicked: Callback,
+    val style: Style = Style.NORMAL
 ) : Item<ButtonItem>() {
 
+    enum class Style {
+        NORMAL,
+        OUTLINED
+    }
+
     override val layoutId: Int
-        get() = R.layout.item_button
+        get() = when (style) {
+            Style.NORMAL -> R.layout.item_button
+            Style.OUTLINED -> R.layout.item_button_outlined
+        }
 
     override fun bind(layout: LayoutContainer) {
         val button = layout.containerView as MaterialButton

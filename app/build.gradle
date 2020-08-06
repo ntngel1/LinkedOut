@@ -26,21 +26,25 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation libs.stdlib
 
     implementation features.authorization
     implementation features.proxy_settings
 
-    implementation libs.stdlib
     implementation libs.utils
+    implementation libs.telegram
 
     implementation libs.core_ktx
     implementation libs.lifecycle_viewmodel_ktx
+
     implementation libs.material
     implementation libs.appcompat
     implementation libs.constraintlayout
+
     implementation libs.cicerone
     implementation libs.gson
     implementation libs.okhttp
+    implementation libs.timber
 
     implementation libs.hilt
     implementation libs.hilt_viewmodel

@@ -3,6 +3,8 @@ package com.github.ntngel1.linkedout.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.github.ntngel1.linkedout.BuildConfig
+import com.github.ntngel1.linkedout.logger.Logger
+import com.github.ntngel1.linkedout.logger.TimberLogger
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -42,5 +44,5 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGson(): Gson = GsonBuilder().create()
+    fun provideLogger(): Logger = TimberLogger()
 }

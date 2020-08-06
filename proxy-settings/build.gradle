@@ -36,6 +36,7 @@ dependencies {
     implementation libs.utils
     implementation libs.styling
     implementation libs.delegate_adapter
+    implementation libs.telegram
 
     implementation libs.core_ktx
     implementation libs.fragment_ktx
