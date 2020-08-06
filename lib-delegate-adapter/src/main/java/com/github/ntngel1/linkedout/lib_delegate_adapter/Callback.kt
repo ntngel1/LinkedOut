@@ -76,6 +76,41 @@ sealed class Callback1<T1> {
     }
 }
 
+sealed class Callback2<T1, T2> {
+
+    abstract val listener: (T1, T2) -> Unit
+
+    operator fun invoke(t1: T1, t2: T2) {
+        listener.invoke(t1, t2)
+    }
+
+    data class Hashable<T1, T2>(
+        override val listener: (T1, T2) -> Unit
+    ) : Callback2<T1, T2>() {
+
+        override fun equals(other: Any?): Boolean {
+            return false
+        }
+
+        override fun hashCode(): Int {
+            return listener.hashCode()
+        }
+    }
+
+    data class NonHashable<T1, T2>(
+        override val listener: (T1, T2) -> Unit
+    ) : Callback2<T1, T2>() {
+
+        override fun equals(other: Any?): Boolean {
+            return other !is Hashable<*, *>
+        }
+
+        override fun hashCode(): Int {
+            return listener.hashCode()
+        }
+    }
+}
+
 /**
  * @param static if false, item will be bound again even if no fields' values changed
  *               else if true, item will not be bound again if just callback changed
@@ -102,6 +137,21 @@ fun <T1> callback1(static: Boolean = false, listener: (T1) -> Unit) =
         )
     } else {
         Callback1.Hashable(
+            listener
+        )
+    }
+
+/**
+ * @param static if false, item will be bound again even if no fields' values changed
+ *               else if true, item will not be bound again if just callback changed
+ */
+fun <T1, T2> callback2(static: Boolean = false, listener: (T1, T2) -> Unit) =
+    if (static) {
+        Callback2.NonHashable(
+            listener
+        )
+    } else {
+        Callback2.Hashable(
             listener
         )
     }

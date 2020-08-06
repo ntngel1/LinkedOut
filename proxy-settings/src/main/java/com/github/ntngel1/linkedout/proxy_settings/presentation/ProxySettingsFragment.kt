@@ -6,6 +6,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.github.ntngel1.linkedout.lib_delegate_adapter.callback
 import com.github.ntngel1.linkedout.lib_delegate_adapter.callback1
+import com.github.ntngel1.linkedout.lib_delegate_adapter.callback2
 import com.github.ntngel1.linkedout.lib_delegate_adapter.item_decorations.SpacingItemDecoration
 import com.github.ntngel1.linkedout.lib_delegate_adapter.render
 import com.github.ntngel1.linkedout.lib_extensions.BaseFragment
@@ -13,7 +14,7 @@ import com.github.ntngel1.linkedout.lib_extensions.dp
 import com.github.ntngel1.linkedout.lib_extensions.string
 import com.github.ntngel1.linkedout.lib_ui.items.ButtonItem
 import com.github.ntngel1.linkedout.lib_ui.items.SingleSelectDropdownItem
-import com.github.ntngel1.linkedout.lib_ui.items.TextInputItem
+import com.github.ntngel1.linkedout.lib_ui.items.text_input.TextInputItem
 import com.github.ntngel1.linkedout.proxy_settings.R
 import com.github.ntngel1.linkedout.proxy_settings.entity.ProxyType
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,7 +66,8 @@ class ProxySettingsFragment : BaseFragment() {
                 id = "proxy_hostname_text_input",
                 hint = string(R.string.proxy_settings_hostname),
                 text = state.newProxySettings.proxyHostname.orEmpty(),
-                onTextChanged = callback1(
+                cursorPosition = state.hostnameCursorPosition,
+                onTextChanged = callback2(
                     static = true,
                     listener = viewModel::onProxyHostnameChanged
                 )
@@ -78,7 +80,8 @@ class ProxySettingsFragment : BaseFragment() {
                 hint = string(R.string.proxy_settings_port),
                 inputType = InputType.TYPE_CLASS_NUMBER,
                 text = state.newProxySettings.proxyPort?.toString() ?: "",
-                onTextChanged = callback1(static = true, listener = viewModel::onProxyPortChanged)
+                cursorPosition = state.portCursorPosition,
+                onTextChanged = callback2(static = true, listener = viewModel::onProxyPortChanged)
             ).render()
         }
 

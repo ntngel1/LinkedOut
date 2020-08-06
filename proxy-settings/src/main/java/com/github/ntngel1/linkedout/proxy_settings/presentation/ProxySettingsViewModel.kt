@@ -44,32 +44,36 @@ class ProxySettingsViewModel @ViewModelInject constructor(
         TODO("Not yet implemented")
     }
 
-    fun onProxyHostnameChanged(hostname: CharSequence) {
+    fun onProxyHostnameChanged(hostname: CharSequence, cursorPosition: Int) {
         val newProxySettings = _state.value!!.newProxySettings!!.copy(
             proxyHostname = hostname.toString()
         )
 
         _state.value = _state.value!!.copy(
             isSaveButtonVisible = newProxySettings != _state.value!!.savedProxySettings,
-            newProxySettings = newProxySettings
+            newProxySettings = newProxySettings,
+            hostnameCursorPosition = cursorPosition
         )
     }
 
-    fun onProxyPortChanged(port: CharSequence) {
+    fun onProxyPortChanged(port: CharSequence, cursorPosition: Int) {
         val portInt = port.toString().toIntOrNull()
             ?: 0
 
+        val normalizedPort = when {
+            portInt < MIN_PORT -> MIN_PORT
+            portInt > MAX_PORT -> MAX_PORT
+            else -> portInt
+        }
+
         val newProxySettings = _state.value!!.newProxySettings!!.copy(
-            proxyPort = when {
-                portInt < MIN_PORT -> MIN_PORT
-                portInt > MAX_PORT -> MAX_PORT
-                else -> portInt
-            }
+            proxyPort = normalizedPort
         )
 
         _state.value = _state.value!!.copy(
             isSaveButtonVisible = newProxySettings != _state.value!!.savedProxySettings,
-            newProxySettings = newProxySettings
+            newProxySettings = newProxySettings,
+            portCursorPosition = cursorPosition
         )
     }
 

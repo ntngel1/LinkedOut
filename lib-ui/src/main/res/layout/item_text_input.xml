@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     tools:hint="Some hint">
 
-    <com.google.android.material.textfield.TextInputEditText
+    <com.github.ntngel1.linkedout.lib_ui.ExtendedTextInputEditText
         android:id="@+id/text_input_edit_text_text_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

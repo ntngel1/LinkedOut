@@ -11,7 +11,7 @@ import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import kotlinx.android.extensions.LayoutContainer
 
-abstract class   Item<T : Item<T>> {
+abstract class Item<T : Item<T>> {
 
     abstract val id: String
 

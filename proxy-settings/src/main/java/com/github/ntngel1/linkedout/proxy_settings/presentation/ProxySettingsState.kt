@@ -10,5 +10,7 @@ data class ProxySettingsState(
     val isProxyInputsVisible: Boolean = false,
     val savedProxySettings: ProxySettingsEntity? = null,
     val newProxySettings: ProxySettingsEntity? = savedProxySettings,
+    val hostnameCursorPosition: Int = 0,
+    val portCursorPosition: Int = 0,
     val connectionQuality: ConnectionQualityEntity? = null
 )
