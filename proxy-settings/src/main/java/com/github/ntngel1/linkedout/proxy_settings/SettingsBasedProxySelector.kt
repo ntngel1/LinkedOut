@@ -21,7 +21,7 @@ class SettingsBasedProxySelector @Inject constructor(
 
     private fun ProxySettingsEntity.toJavaNetProxy(): Proxy {
         val type = when (proxyType) {
-            ProxyType.DIRECT -> Proxy.Type.DIRECT
+            ProxyType.NO_PROXY -> Proxy.Type.DIRECT
             ProxyType.HTTP -> Proxy.Type.HTTP
             ProxyType.SOCKS -> Proxy.Type.SOCKS
         }

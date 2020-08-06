@@ -1,18 +1,13 @@
 package com.github.ntngel1.linkedout.proxy_settings.presentation
 
-import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.ntngel1.linkedout.lib_extensions.BaseViewModel
-import com.github.ntngel1.linkedout.proxy_settings.domain.repository.ProxySettingsRepository
 import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.get_proxy_settings.GetProxySettingsUseCase
-import com.github.ntngel1.linkedout.proxy_settings.entity.ProxySettingsEntity
 import com.github.ntngel1.linkedout.proxy_settings.entity.ProxyType
 import kotlinx.coroutines.launch
-import okhttp3.*
-import java.io.IOException
 
 class ProxySettingsViewModel @ViewModelInject constructor(
     private val getProxySettings: GetProxySettingsUseCase
@@ -27,17 +22,24 @@ class ProxySettingsViewModel @ViewModelInject constructor(
 
     private fun loadProxySettings() = viewModelScope.launch {
         val proxySettings = getProxySettings()
-        _state.value =
-            ProxySettingsState(savedProxySettings = proxySettings, isProxyInputsVisible = true)
+        changeState {
+            ProxySettingsState(
+                savedProxyHostname = proxySettings.proxyHostname,
+                savedProxyPort = proxySettings.proxyPort,
+                savedProxyType = proxySettings.proxyType,
+                isProxyInputsVisible = shouldShowProxyInputs(proxySettings.proxyType)
+            )
+        }
     }
 
-    fun onProxyTypeChanged(proxyTypeString: String) {
-        val proxyType = ProxyType.valueOf(proxyTypeString)
-        val newProxySettings = _state.value!!.newProxySettings!!.copy(proxyType = proxyType)
-        _state.value = _state.value!!.copy(
-            isSaveButtonVisible = newProxySettings != _state.value!!.savedProxySettings,
-            newProxySettings = newProxySettings
-        )
+    fun onProxyTypeChanged(proxyType: ProxyType) {
+        changeState { state ->
+            state.copy(
+                newProxyType = proxyType,
+                isProxyInputsVisible = shouldShowProxyInputs(proxyType),
+                isSaveButtonVisible = state.shouldShowSaveButton(newProxyType = proxyType)
+            )
+        }
     }
 
     fun onSaveClicked() {
@@ -45,15 +47,14 @@ class ProxySettingsViewModel @ViewModelInject constructor(
     }
 
     fun onProxyHostnameChanged(hostname: CharSequence, cursorPosition: Int) {
-        val newProxySettings = _state.value!!.newProxySettings!!.copy(
-            proxyHostname = hostname.toString()
-        )
-
-        _state.value = _state.value!!.copy(
-            isSaveButtonVisible = newProxySettings != _state.value!!.savedProxySettings,
-            newProxySettings = newProxySettings,
-            hostnameCursorPosition = cursorPosition
-        )
+        val hostname = hostname.toString().replace(" ", "")
+        changeState { state ->
+            state.copy(
+                newProxyHostname = hostname,
+                hostnameCursorPosition = cursorPosition,
+                isSaveButtonVisible = state.shouldShowSaveButton(newProxyHostname = hostname)
+            )
+        }
     }
 
     fun onProxyPortChanged(port: CharSequence, cursorPosition: Int) {
@@ -66,15 +67,32 @@ class ProxySettingsViewModel @ViewModelInject constructor(
             else -> portInt
         }
 
-        val newProxySettings = _state.value!!.newProxySettings!!.copy(
-            proxyPort = normalizedPort
-        )
+        changeState { state ->
+            state.copy(
+                newProxyPort = normalizedPort,
+                isSaveButtonVisible = state.shouldShowSaveButton(newProxyPort = normalizedPort),
+                portCursorPosition = cursorPosition
+            )
+        }
+    }
 
-        _state.value = _state.value!!.copy(
-            isSaveButtonVisible = newProxySettings != _state.value!!.savedProxySettings,
-            newProxySettings = newProxySettings,
-            portCursorPosition = cursorPosition
-        )
+    private fun ProxySettingsState.shouldShowSaveButton(
+        newProxyType: ProxyType? = this.newProxyType,
+        newProxyHostname: String? = this.newProxyHostname,
+        newProxyPort: Int? = this.newProxyPort
+    ) = if (newProxyType == ProxyType.NO_PROXY) {
+        newProxyType != savedProxyType
+    } else {
+        newProxyType != savedProxyType ||
+                newProxyHostname != savedProxyHostname ||
+                newProxyPort != savedProxyPort
+    }
+
+    private fun shouldShowProxyInputs(proxyType: ProxyType) =
+        proxyType != ProxyType.NO_PROXY
+
+    private fun changeState(updater: (state: ProxySettingsState) -> ProxySettingsState) {
+        _state.value = _state.value?.let(updater)
     }
 
     companion object {

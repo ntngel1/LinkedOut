@@ -2,6 +2,7 @@ package com.github.ntngel1.linkedout.lib_ui.items
 
 import android.widget.ArrayAdapter
 import com.github.ntngel1.linkedout.lib_delegate_adapter.Callback1
+import com.github.ntngel1.linkedout.lib_delegate_adapter.Callback2
 import com.github.ntngel1.linkedout.lib_delegate_adapter.core.Item
 import com.github.ntngel1.linkedout.lib_ui.R
 import kotlinx.android.extensions.LayoutContainer
@@ -12,7 +13,7 @@ data class SingleSelectDropdownItem(
     val hint: String,
     val entries: List<String>,
     val selectedEntryIndex: Int,
-    val onEntrySelected: Callback1<String>
+    val onEntrySelected: Callback2<String, Int>
 ) : Item<SingleSelectDropdownItem>() {
 
     override val layoutId: Int
@@ -20,11 +21,9 @@ data class SingleSelectDropdownItem(
 
     override fun bind(layout: LayoutContainer) {
         bindHint(layout)
-        with(layout.autocomplete_textview_single_select_dropdown) {
-            bindEntries(layout)
-            bindSelectedEntry(layout)
-            bindListeners(layout)
-        }
+        bindEntries(layout)
+        bindSelectedEntry(layout)
+        bindListeners(layout)
     }
 
     override fun bind(previousItem: SingleSelectDropdownItem, layout: LayoutContainer) {
@@ -64,7 +63,7 @@ data class SingleSelectDropdownItem(
 
     private fun bindListeners(layout: LayoutContainer) {
         layout.autocomplete_textview_single_select_dropdown.setOnItemClickListener { _, _, position, _ ->
-            onEntrySelected.invoke(entries[position])
+            onEntrySelected.invoke(entries[position], position)
         }
     }
 }

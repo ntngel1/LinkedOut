@@ -5,7 +5,6 @@ import android.text.InputType
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.github.ntngel1.linkedout.lib_delegate_adapter.callback
-import com.github.ntngel1.linkedout.lib_delegate_adapter.callback1
 import com.github.ntngel1.linkedout.lib_delegate_adapter.callback2
 import com.github.ntngel1.linkedout.lib_delegate_adapter.item_decorations.SpacingItemDecoration
 import com.github.ntngel1.linkedout.lib_delegate_adapter.render
@@ -19,6 +18,7 @@ import com.github.ntngel1.linkedout.proxy_settings.R
 import com.github.ntngel1.linkedout.proxy_settings.entity.ProxyType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_proxy_settings.*
+import java.lang.IllegalStateException
 
 @AndroidEntryPoint
 class ProxySettingsFragment : BaseFragment() {
@@ -47,26 +47,38 @@ class ProxySettingsFragment : BaseFragment() {
     private fun render(
         state: ProxySettingsState
     ) = recyclerview_proxy_settings.render(spacingItemDecoration = spacingItemDecoration) {
-        state.newProxySettings?.let { proxySettings ->
+        state.newProxyType?.let { proxyType ->
             SingleSelectDropdownItem(
                 id = "proxy_type_dropdown",
                 hint = string(R.string.proxy_settings_proxy_type),
-                entries = ProxyType.values().map { it.name },
-                selectedEntryIndex = proxySettings.proxyType.ordinal,
-                onEntrySelected = callback1(static = true) { proxyTypeString ->
-                    viewModel.onProxyTypeChanged(proxyTypeString)
+                entries = listOf(
+                    string(R.string.proxy_settings_proxy_type_no_proxy),
+                    string(R.string.proxy_settings_proxy_type_http),
+                    string(R.string.proxy_settings_proxy_type_socks)
+                ),
+                selectedEntryIndex = proxyType.ordinal,
+                onEntrySelected = callback2(static = true) { _, proxyTypeIndex ->
+                    val proxyType = when (proxyTypeIndex) {
+                        0 -> ProxyType.NO_PROXY
+                        1 -> ProxyType.HTTP
+                        2 -> ProxyType.SOCKS
+                        else -> throw IllegalStateException("No such ProxyType value for index $proxyTypeIndex")
+                    }
+
+                    viewModel.onProxyTypeChanged(proxyType)
                 }
             ).render()
 
             spacing(8.dp)
         }
 
-        if (state.isProxyInputsVisible && state.newProxySettings != null) {
+        if (state.isProxyInputsVisible) {
             TextInputItem(
                 id = "proxy_hostname_text_input",
                 hint = string(R.string.proxy_settings_hostname),
-                text = state.newProxySettings.proxyHostname.orEmpty(),
+                text = state.newProxyHostname.orEmpty(),
                 cursorPosition = state.hostnameCursorPosition,
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS,
                 onTextChanged = callback2(
                     static = true,
                     listener = viewModel::onProxyHostnameChanged
@@ -79,10 +91,12 @@ class ProxySettingsFragment : BaseFragment() {
                 id = "proxy_port_text_input",
                 hint = string(R.string.proxy_settings_port),
                 inputType = InputType.TYPE_CLASS_NUMBER,
-                text = state.newProxySettings.proxyPort?.toString() ?: "",
+                text = state.newProxyPort?.toString().orEmpty(),
                 cursorPosition = state.portCursorPosition,
                 onTextChanged = callback2(static = true, listener = viewModel::onProxyPortChanged)
             ).render()
+
+            spacing(8.dp)
         }
 
         if (state.isSaveButtonVisible) {
