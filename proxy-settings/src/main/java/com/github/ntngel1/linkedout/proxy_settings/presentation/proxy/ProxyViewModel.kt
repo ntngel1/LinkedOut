@@ -1,4 +1,4 @@
-package com.github.ntngel1.linkedout.proxy_settings.presentation
+package com.github.ntngel1.linkedout.proxy_settings.presentation.proxy
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -6,34 +6,58 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.ntngel1.linkedout.lib_extensions.BaseViewModel
 import com.github.ntngel1.linkedout.lib_extensions.skipWhitespaces
-import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.get_proxy_settings.GetProxySettingsUseCase
-import com.github.ntngel1.linkedout.proxy_settings.entity.ProxyType
+import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.get_proxy.GetProxyUseCase
+import com.github.ntngel1.linkedout.proxy_settings.entity.ProxyEntity
+import com.github.ntngel1.linkedout.proxy_settings.presentation.proxy.enums.ProxyType
 import kotlinx.coroutines.launch
 
-class ProxySettingsViewModel @ViewModelInject constructor(
-    private val getProxySettings: GetProxySettingsUseCase
+class ProxyViewModel @ViewModelInject constructor(
+    private val getProxy: GetProxyUseCase
 ) : BaseViewModel() {
 
-    private val _state = MutableLiveData<ProxySettingsState>(ProxySettingsState())
-    val state: LiveData<ProxySettingsState> = _state
+    private val _state = MutableLiveData<ProxyState>(ProxyState())
+    private val currentState = _state.value!!
+    val state: LiveData<ProxyState> = _state
 
-    init {
-        loadProxySettings()
+    fun setup(proxyId: Int) {
+        changeState { state ->
+            state.copy(proxyId = proxyId)
+        }
+
+        loadProxy()
     }
 
-    private fun loadProxySettings() = viewModelScope.launch {
-        val proxySettings = getProxySettings()
+    private fun loadProxy() = viewModelScope.launch {
+        val proxy = getProxy(currentState.proxyId)
+        val proxyType = when (proxy) {
+            is ProxyEntity.Http -> ProxyType.HTTP
+            is ProxyEntity.Socks5 -> ProxyType.SOCKS5
+            is ProxyEntity.MtProto -> ProxyType.MT_PROTO
+        }
+
         changeState {
-            ProxySettingsState(
-                savedProxyHostname = proxySettings.proxyHostname,
-                savedProxyPort = proxySettings.proxyPort,
-                savedProxyType = proxySettings.proxyType,
-                isHostnameAndPortInputsVisible = shouldShowHostnameAndPortInputs(proxySettings.proxyType),
-                isSecretInputVisible = shouldShowSecretInput(proxySettings.proxyType),
-                isPingProxyButtonVisible = shouldShowPingProxyButton(proxySettings.proxyType),
-                isUsernameAndPasswordInputsVisible = shouldShowUsernameAndPasswordInputs(
-                    proxySettings.proxyType
-                )
+            ProxyState(
+                savedProxyHostname = proxy.hostname,
+                savedProxyPort = proxy.port,
+                savedProxyType = proxyType,
+                savedProxyUsername = when (proxy) {
+                    is ProxyEntity.Http -> proxy.username
+                    is ProxyEntity.Socks5 -> proxy.username
+                    is ProxyEntity.MtProto -> null
+                },
+                savedProxyPassword = when (proxy) {
+                    is ProxyEntity.Http -> proxy.password
+                    is ProxyEntity.Socks5 -> proxy.password
+                    is ProxyEntity.MtProto -> null
+                },
+                savedProxySecret = when (proxy) {
+                    is ProxyEntity.MtProto -> proxy.secret
+                    is ProxyEntity.Http -> null
+                    is ProxyEntity.Socks5 -> null
+                },
+                isPingProxyButtonVisible = true,
+                isSecretInputVisible = shouldShowSecretInput(proxyType),
+                isUsernameAndPasswordInputsVisible = shouldShowUsernameAndPasswordInputs(proxyType)
             )
         }
     }
@@ -42,15 +66,13 @@ class ProxySettingsViewModel @ViewModelInject constructor(
         changeState { state ->
             state.copy(
                 newProxyType = proxyType,
-                isHostnameAndPortInputsVisible = shouldShowHostnameAndPortInputs(proxyType),
                 isUsernameAndPasswordInputsVisible = shouldShowUsernameAndPasswordInputs(proxyType),
                 isSecretInputVisible = shouldShowSecretInput(proxyType),
-                isPingProxyButtonVisible = shouldShowPingProxyButton(proxyType),
+                isPingProxyButtonVisible = true,
                 isSaveButtonVisible = state.shouldShowSaveButton(newProxyType = proxyType)
             )
         }
     }
-
 
     fun onProxyHostnameChanged(hostname: CharSequence, cursorPosition: Int) {
         val hostname = hostname.toString().skipWhitespaces()
@@ -120,10 +142,10 @@ class ProxySettingsViewModel @ViewModelInject constructor(
     }
 
     fun onSaveClicked() {
-        TODO("Not yet implemented")
+
     }
 
-    private fun ProxySettingsState.shouldShowSaveButton(
+    private fun ProxyState.shouldShowSaveButton(
         newProxyType: ProxyType? = this.newProxyType,
         newProxyHostname: String? = this.newProxyHostname,
         newProxyPort: Int? = this.newProxyPort,
@@ -145,19 +167,13 @@ class ProxySettingsViewModel @ViewModelInject constructor(
         }
     }
 
-    private fun shouldShowHostnameAndPortInputs(proxyType: ProxyType) =
-        proxyType != ProxyType.NO_PROXY
-
     private fun shouldShowUsernameAndPasswordInputs(proxyType: ProxyType) =
         proxyType == ProxyType.HTTP || proxyType == ProxyType.SOCKS5
 
     private fun shouldShowSecretInput(proxyType: ProxyType) =
         proxyType == ProxyType.MT_PROTO
 
-    private fun shouldShowPingProxyButton(proxyType: ProxyType) =
-        proxyType != ProxyType.NO_PROXY
-
-    private fun changeState(updater: (state: ProxySettingsState) -> ProxySettingsState) {
+    private fun changeState(updater: (state: ProxyState) -> ProxyState) {
         _state.value = _state.value?.let(updater)
     }
 

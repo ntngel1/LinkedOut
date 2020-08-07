@@ -1,16 +1,15 @@
 package com.github.ntngel1.linkedout.proxy_settings.data
 
-import com.github.ntngel1.linkedout.proxy_settings.domain.repository.PingRepository
-import com.github.ntngel1.linkedout.proxy_settings.entity.ConnectionQualityEntity
+import com.github.ntngel1.linkedout.proxy_settings.domain.gateway.PingProxyGateway
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import javax.inject.Inject
 
-class NetworkPingRepository @Inject constructor(
+class PingProxyGatewayImp @Inject constructor(
     private val okHttpClient: OkHttpClient
-) : PingRepository {
+) : PingProxyGateway {
 
     override suspend fun ping(): Long = withContext(Dispatchers.IO) {
         val request = Request.Builder()

@@ -1,11 +1,11 @@
 package com.github.ntngel1.linkedout.proxy_settings.domain.usecase.check_connection_quality
 
-import com.github.ntngel1.linkedout.proxy_settings.domain.repository.PingRepository
+import com.github.ntngel1.linkedout.proxy_settings.domain.gateway.PingProxyGateway
 import com.github.ntngel1.linkedout.proxy_settings.entity.ConnectionQualityEntity
 import javax.inject.Inject
 
 class CheckConnectionQualityUseCaseImp @Inject constructor(
-    private val pingRepository: PingRepository
+    private val pingProxyGateway: PingProxyGateway
 ) : CheckConnectionQualityUseCase {
 
     override suspend fun invoke(): ConnectionQualityEntity {
@@ -14,7 +14,7 @@ class CheckConnectionQualityUseCaseImp @Inject constructor(
 
         repeat(PING_COUNT) {
             try {
-                totalLatencyMs += pingRepository.ping()
+                totalLatencyMs += pingProxyGateway.ping()
             } catch (t: Throwable) {
                 failedRequestsCount += 1
             }

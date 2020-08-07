@@ -3,7 +3,6 @@
     <string name="proxy_settings">Proxy Settings</string>
 
     <string name="proxy_settings_proxy_type">Proxy Type</string>
-    <string name="proxy_settings_proxy_type_no_proxy">No proxy</string>
     <string name="proxy_settings_proxy_type_http">HTTP</string>
     <string name="proxy_settings_proxy_type_socks">SOCKS</string>
     <string name="proxy_settings_proxy_type_mt_proto">MTProto</string>

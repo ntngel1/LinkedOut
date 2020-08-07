@@ -1,18 +1,17 @@
 package com.github.ntngel1.linkedout.proxy_settings.di
 
-import com.github.ntngel1.linkedout.proxy_settings.data.NetworkPingRepository
-import com.github.ntngel1.linkedout.proxy_settings.data.ProxySettingsRepositoryImp
-import com.github.ntngel1.linkedout.proxy_settings.domain.repository.PingRepository
-import com.github.ntngel1.linkedout.proxy_settings.domain.repository.ProxySettingsRepository
+import com.github.ntngel1.linkedout.proxy_settings.data.PingProxyGatewayImp
+import com.github.ntngel1.linkedout.proxy_settings.data.ProxyGatewayImp
+import com.github.ntngel1.linkedout.proxy_settings.domain.gateway.PingProxyGateway
+import com.github.ntngel1.linkedout.proxy_settings.domain.gateway.ProxyGateway
 import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.check_connection_quality.CheckConnectionQualityUseCase
 import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.check_connection_quality.CheckConnectionQualityUseCaseImp
-import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.get_proxy_settings.GetProxySettingsUseCase
-import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.get_proxy_settings.GetProxySettingsUseCaseImp
+import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.get_proxy.GetProxyUseCase
+import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.get_proxy.GetProxyUseCaseImp
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
-import java.net.ProxySelector
 
 @Module
 @InstallIn(ApplicationComponent::class)
@@ -20,16 +19,16 @@ abstract class ProxySettingsModule {
 
     @Binds
     abstract fun bindProxySettingsRepository(
-        proxySettingsRepositoryImp: ProxySettingsRepositoryImp
-    ): ProxySettingsRepository
+        proxySettingsRepositoryImp: ProxyGatewayImp
+    ): ProxyGateway
 
     @Binds
     abstract fun bindGetProxySettingsUseCase(
-        getProxySettingsUseCaseImp: GetProxySettingsUseCaseImp
-    ): GetProxySettingsUseCase
+        getProxySettingsUseCaseImp: GetProxyUseCaseImp
+    ): GetProxyUseCase
 
     @Binds
-    abstract fun bindPingRepository(networkPingRepository: NetworkPingRepository): PingRepository
+    abstract fun bindPingRepository(pingRepositoryImp: PingProxyGatewayImp): PingProxyGateway
 
     @Binds
     abstract fun bindCheckConnectionQualityUseCase(

@@ -7,7 +7,7 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/material_toolbar_proxy_settings"
-        style="@style/Toolbar"
+        style="@style/Toolbar.WithNavigationIcon"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         app:title="@string/proxy_settings" />
