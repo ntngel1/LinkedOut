@@ -1,11 +1,11 @@
 package com.github.ntngel1.linkedout.proxy_settings.di
 
-import com.github.ntngel1.linkedout.proxy_settings.data.PingProxyGatewayImp
+import com.github.ntngel1.linkedout.proxy_settings.data.ProxyPingGatewayImp
 import com.github.ntngel1.linkedout.proxy_settings.data.ProxyGatewayImp
-import com.github.ntngel1.linkedout.proxy_settings.domain.gateway.PingProxyGateway
+import com.github.ntngel1.linkedout.proxy_settings.domain.gateway.ProxyPingGateway
 import com.github.ntngel1.linkedout.proxy_settings.domain.gateway.ProxyGateway
-import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.check_connection_quality.CheckConnectionQualityUseCase
-import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.check_connection_quality.CheckConnectionQualityUseCaseImp
+import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.ping_proxy.PingProxyUseCase
+import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.ping_proxy.PingProxyUseCaseImp
 import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.get_proxy.GetProxyUseCase
 import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.get_proxy.GetProxyUseCaseImp
 import dagger.Binds
@@ -28,10 +28,10 @@ abstract class ProxySettingsModule {
     ): GetProxyUseCase
 
     @Binds
-    abstract fun bindPingRepository(pingRepositoryImp: PingProxyGatewayImp): PingProxyGateway
+    abstract fun bindPingRepository(pingRepositoryImp: ProxyPingGatewayImp): ProxyPingGateway
 
     @Binds
     abstract fun bindCheckConnectionQualityUseCase(
-        checkConnectionQualityUseCaseImp: CheckConnectionQualityUseCaseImp
-    ): CheckConnectionQualityUseCase
+        checkConnectionQualityUseCaseImp: PingProxyUseCaseImp
+    ): PingProxyUseCase
 }

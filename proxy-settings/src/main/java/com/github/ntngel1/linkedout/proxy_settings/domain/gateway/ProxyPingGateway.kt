@@ -1,9 +1,9 @@
 package com.github.ntngel1.linkedout.proxy_settings.domain.gateway
 
-interface PingProxyGateway {
+interface ProxyPingGateway {
 
     /**
      * @return ping latency in milliseconds
      */
-    suspend fun ping(): Long
+    suspend fun ping(proxyId: Int): Long
 }

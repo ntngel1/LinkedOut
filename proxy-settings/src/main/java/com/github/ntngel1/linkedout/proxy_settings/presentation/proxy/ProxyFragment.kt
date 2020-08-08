@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.text.buildSpannedString
 import androidx.fragment.app.viewModels
 import com.github.ntngel1.linkedout.lib_delegate_adapter.callback
 import com.github.ntngel1.linkedout.lib_delegate_adapter.callback2
@@ -11,11 +12,15 @@ import com.github.ntngel1.linkedout.lib_delegate_adapter.item_decorations.Spacin
 import com.github.ntngel1.linkedout.lib_delegate_adapter.render
 import com.github.ntngel1.linkedout.lib_extensions.BaseFragment
 import com.github.ntngel1.linkedout.lib_extensions.dp
+import com.github.ntngel1.linkedout.lib_extensions.attributeResourceId
 import com.github.ntngel1.linkedout.lib_extensions.string
 import com.github.ntngel1.linkedout.lib_ui.items.ButtonItem
+import com.github.ntngel1.linkedout.lib_ui.items.LoadingItem
 import com.github.ntngel1.linkedout.lib_ui.items.SingleSelectDropdownItem
+import com.github.ntngel1.linkedout.lib_ui.items.TextItem
 import com.github.ntngel1.linkedout.lib_ui.items.text_input.TextInputItem
 import com.github.ntngel1.linkedout.proxy_settings.R
+import com.github.ntngel1.linkedout.proxy_settings.entity.ProxyPingEntity
 import com.github.ntngel1.linkedout.proxy_settings.presentation.proxy.enums.ProxyType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_proxy.*
@@ -151,12 +156,32 @@ class ProxyFragment : BaseFragment() {
             spacing(8.dp)
         }
 
+        if (state.isPingingProxy) {
+            LoadingItem(
+                id = "pinging_proxy_loading"
+            ).render()
+
+            spacing(8.dp)
+        }
+
+        if (state.isProxyPingVisible) {
+            TextItem(
+                id = "proxy_ping_text",
+                text = makeProxyPingText(state),
+                textAppearanceResId = attributeResourceId(R.attr.textAppearanceBody1)
+            ).render()
+
+            spacing(8.dp)
+        }
+
         if (state.isPingProxyButtonVisible) {
             ButtonItem(
                 id = "ping_proxy_button",
                 text = string(R.string.proxy_settings_ping_proxy),
                 style = ButtonItem.Style.OUTLINED,
-                onClicked = callback(static = true, listener = viewModel::onPingProxyClicked)
+                onClicked = callback(static = true) {
+                    viewModel.onPingProxyClicked()
+                }
             ).render()
 
             spacing(8.dp)
@@ -171,10 +196,28 @@ class ProxyFragment : BaseFragment() {
         }
     }
 
+    private fun makeProxyPingText(state: ProxyState): CharSequence = buildSpannedString {
+        if (state.proxyPingLatencyMs != null && state.proxyPingLatencyMs > 0) {
+            string(R.string.proxy_settings_proxy_ping_latency, state.proxyPingLatencyMs)
+                .let(::appendln)
+        }
+
+        if (state.proxyPingStability != null) {
+            val stabilityStringId = when (state.proxyPingStability) {
+                ProxyPingEntity.Stability.GOOD -> R.string.proxy_settings_proxy_ping_stability_good
+                ProxyPingEntity.Stability.NORMAL -> R.string.proxy_settings_proxy_ping_stability_normal
+                ProxyPingEntity.Stability.BAD -> R.string.proxy_settings_proxy_ping_stability_bad
+            }
+
+            string(R.string.proxy_settings_proxy_ping_stability, string(stabilityStringId))
+                .let(::append)
+        }
+    }
+
     companion object {
         private const val PROXY_ID_KEY = "proxy_id"
 
-        fun newInstance(proxyId: Int) = ProxyFragment().apply {
+        fun newInstance(proxyId: Int = -1) = ProxyFragment().apply {
             arguments = bundleOf(PROXY_ID_KEY to proxyId)
         }
     }

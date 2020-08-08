@@ -48,6 +48,7 @@ dependencies {
     implementation libs.gson
     implementation libs.okhttp
     implementation libs.coroutines
+    implementation libs.timber
 
     implementation libs.hilt
     kapt libs.hilt_compiler

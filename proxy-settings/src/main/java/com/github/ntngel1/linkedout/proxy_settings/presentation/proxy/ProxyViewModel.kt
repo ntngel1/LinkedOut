@@ -7,16 +7,20 @@ import androidx.lifecycle.viewModelScope
 import com.github.ntngel1.linkedout.lib_extensions.BaseViewModel
 import com.github.ntngel1.linkedout.lib_extensions.skipWhitespaces
 import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.get_proxy.GetProxyUseCase
+import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.ping_proxy.PingProxyUseCase
 import com.github.ntngel1.linkedout.proxy_settings.entity.ProxyEntity
 import com.github.ntngel1.linkedout.proxy_settings.presentation.proxy.enums.ProxyType
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ProxyViewModel @ViewModelInject constructor(
-    private val getProxy: GetProxyUseCase
+    private val getProxy: GetProxyUseCase,
+    private val pingProxy: PingProxyUseCase
 ) : BaseViewModel() {
 
     private val _state = MutableLiveData<ProxyState>(ProxyState())
-    private val currentState = _state.value!!
+    private val currentState: ProxyState
+        get() = _state.value!!
     val state: LiveData<ProxyState> = _state
 
     fun setup(proxyId: Int) {
@@ -137,8 +141,49 @@ class ProxyViewModel @ViewModelInject constructor(
         }
     }
 
-    fun onPingProxyClicked() {
+    fun onPingProxyClicked() = viewModelScope.launch {
+        changeState { state ->
+            state.copy(
+                isPingProxyButtonVisible = false,
+                isProxyPingVisible = false,
+                isPingingProxy = true,
+                proxyPingLatencyMs = null,
+                proxyPingStability = null
+            )
+        }
 
+        val state = currentState
+        val proxy = when (state.newProxyType!!) {
+            ProxyType.HTTP -> ProxyEntity.Http(
+                hostname = state.newProxyHostname!!,
+                port = state.newProxyPort!!,
+                username = state.newProxyUsername.orEmpty(),
+                password = state.newProxyPassword.orEmpty()
+            )
+            ProxyType.SOCKS5 -> ProxyEntity.Socks5(
+                hostname = state.newProxyHostname!!,
+                port = state.newProxyPort!!,
+                username = state.newProxyUsername.orEmpty(),
+                password = state.newProxyPassword.orEmpty()
+            )
+            ProxyType.MT_PROTO -> ProxyEntity.MtProto(
+                hostname = state.newProxyHostname!!,
+                port = state.newProxyPort!!,
+                secret = state.newProxySecret!!
+            )
+        }
+
+        val proxyPing = pingProxy(proxy)
+
+        changeState { state ->
+            state.copy(
+                isPingProxyButtonVisible = true,
+                isProxyPingVisible = true,
+                isPingingProxy = false,
+                proxyPingLatencyMs = proxyPing.latencyMs,
+                proxyPingStability = proxyPing.stability
+            )
+        }
     }
 
     fun onSaveClicked() {

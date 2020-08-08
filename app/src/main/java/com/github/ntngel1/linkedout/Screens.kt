@@ -11,7 +11,6 @@ object Screens {
     }
 
     object ProxySettings : SupportAppScreen() {
-        override fun getFragment() =
-            ProxyFragment()
+        override fun getFragment() = ProxyFragment.newInstance()
     }
 }

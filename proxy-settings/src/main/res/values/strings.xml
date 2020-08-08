@@ -13,4 +13,10 @@
     <string name="proxy_settings_password">Password</string>
     <string name="proxy_settings_secret">Secret</string>
     <string name="proxy_settings_ping_proxy">Ping proxy</string>
+
+    <string name="proxy_settings_proxy_ping_latency">Latency: %1$d ms</string>
+    <string name="proxy_settings_proxy_ping_stability">Stability is %1$s</string>
+    <string name="proxy_settings_proxy_ping_stability_good">good</string>
+    <string name="proxy_settings_proxy_ping_stability_normal">normal</string>
+    <string name="proxy_settings_proxy_ping_stability_bad">bad</string>
 </resources>

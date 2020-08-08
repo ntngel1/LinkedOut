@@ -1,20 +1,23 @@
 package com.github.ntngel1.linkedout.proxy_settings.presentation.proxy
 
-import com.github.ntngel1.linkedout.proxy_settings.entity.ConnectionQualityEntity
+import com.github.ntngel1.linkedout.proxy_settings.entity.ProxyPingEntity
 import com.github.ntngel1.linkedout.proxy_settings.presentation.proxy.enums.ProxyType
 
 // TODO: Maybe we can have just only cursorPosition field that can be used across all inputs?
 data class ProxyState(
     val proxyId: Int = -1,
+
     /** [isUsernameAndPasswordInputsVisible] is true if [ProxyType] == [ProxyType.HTTP] || [ProxyType.SOCKS5] */
     val isUsernameAndPasswordInputsVisible: Boolean = false,
     /** [isSecretInputVisible] is true if [ProxyType] == [ProxyType.MT_PROTO] */
     val isSecretInputVisible: Boolean = false,
     val isPingProxyButtonVisible: Boolean = false,
+    val isProxyPingVisible: Boolean = false,
     val isSaveButtonVisible: Boolean = false,
     val isPingingProxy: Boolean = false,
-    val connectionLatencyMs: Int? = null,
-    val connectionStability: ConnectionQualityEntity.Stability? = null,
+
+    val proxyPingLatencyMs: Long? = null,
+    val proxyPingStability: ProxyPingEntity.Stability? = null,
 
     // Already saved proxy configuration
     val savedProxyType: ProxyType? = null,
