@@ -19,4 +19,7 @@
     <string name="proxy_settings_proxy_ping_stability_good">good</string>
     <string name="proxy_settings_proxy_ping_stability_normal">normal</string>
     <string name="proxy_settings_proxy_ping_stability_bad">bad</string>
+    <string name="proxy_settings_enable">Enable</string>
+    <string name="proxy_settings_add">Add</string>
+    <string name="proxy_settings_save">Save</string>
 </resources>

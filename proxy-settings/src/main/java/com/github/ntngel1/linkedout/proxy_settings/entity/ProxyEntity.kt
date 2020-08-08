@@ -5,6 +5,7 @@ sealed class ProxyEntity {
     abstract val id: Int
     abstract val hostname: String
     abstract val port: Int
+    abstract val isEnabled: Boolean
 
     /**
      * if true then it wasn't created by user and corresponds to internal logic
@@ -16,6 +17,7 @@ sealed class ProxyEntity {
         override val id: Int = -1,
         override val hostname: String = "",
         override val port: Int = 80,
+        override val isEnabled: Boolean = false,
         override val isInternal: Boolean = false,
         val username: String = "",
         val password: String = ""
@@ -25,6 +27,7 @@ sealed class ProxyEntity {
         override val id: Int = -1,
         override val hostname: String = "",
         override val port: Int = 80,
+        override val isEnabled: Boolean = false,
         override val isInternal: Boolean = false,
         val username: String = "",
         val password: String = ""
@@ -34,6 +37,7 @@ sealed class ProxyEntity {
         override val id: Int = -1,
         override val hostname: String = "",
         override val port: Int = 80,
+        override val isEnabled: Boolean = false,
         override val isInternal: Boolean = false,
         val secret: String = ""
     ) : ProxyEntity()

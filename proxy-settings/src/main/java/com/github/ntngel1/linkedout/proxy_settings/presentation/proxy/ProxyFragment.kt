@@ -7,6 +7,7 @@ import androidx.core.os.bundleOf
 import androidx.core.text.buildSpannedString
 import androidx.fragment.app.viewModels
 import com.github.ntngel1.linkedout.lib_delegate_adapter.callback
+import com.github.ntngel1.linkedout.lib_delegate_adapter.callback1
 import com.github.ntngel1.linkedout.lib_delegate_adapter.callback2
 import com.github.ntngel1.linkedout.lib_delegate_adapter.item_decorations.SpacingItemDecoration
 import com.github.ntngel1.linkedout.lib_delegate_adapter.render
@@ -14,10 +15,7 @@ import com.github.ntngel1.linkedout.lib_extensions.BaseFragment
 import com.github.ntngel1.linkedout.lib_extensions.dp
 import com.github.ntngel1.linkedout.lib_extensions.attributeResourceId
 import com.github.ntngel1.linkedout.lib_extensions.string
-import com.github.ntngel1.linkedout.lib_ui.items.ButtonItem
-import com.github.ntngel1.linkedout.lib_ui.items.LoadingItem
-import com.github.ntngel1.linkedout.lib_ui.items.SingleSelectDropdownItem
-import com.github.ntngel1.linkedout.lib_ui.items.TextItem
+import com.github.ntngel1.linkedout.lib_ui.items.*
 import com.github.ntngel1.linkedout.lib_ui.items.text_input.TextInputItem
 import com.github.ntngel1.linkedout.proxy_settings.R
 import com.github.ntngel1.linkedout.proxy_settings.entity.ProxyPingEntity
@@ -177,6 +175,17 @@ class ProxyFragment : BaseFragment() {
             spacing(8.dp)
         }
 
+        SwitchItem(
+            id = "enable_switch",
+            isChecked = true,
+            text = string(R.string.proxy_settings_enable),
+            onCheckedChange = callback1(static = true) {
+
+            }
+        ).render()
+
+        spacing(8.dp)
+
         if (state.isPingProxyButtonVisible) {
             ButtonItem(
                 id = "ping_proxy_button",
@@ -191,9 +200,15 @@ class ProxyFragment : BaseFragment() {
         }
 
         if (state.isSaveButtonVisible) {
+            val text = if (state.proxyId == null) {
+                string(R.string.proxy_settings_add)
+            } else {
+                string(R.string.proxy_settings_save)
+            }
+
             ButtonItem(
                 id = "save_button",
-                text = "Save",
+                text = text,
                 onClicked = callback(static = true, listener = viewModel::onSaveClicked)
             ).render()
         }

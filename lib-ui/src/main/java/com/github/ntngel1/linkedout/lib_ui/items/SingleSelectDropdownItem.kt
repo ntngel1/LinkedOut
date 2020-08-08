@@ -1,7 +1,6 @@
 package com.github.ntngel1.linkedout.lib_ui.items
 
 import android.widget.ArrayAdapter
-import com.github.ntngel1.linkedout.lib_delegate_adapter.Callback1
 import com.github.ntngel1.linkedout.lib_delegate_adapter.Callback2
 import com.github.ntngel1.linkedout.lib_delegate_adapter.core.Item
 import com.github.ntngel1.linkedout.lib_ui.R
@@ -23,7 +22,7 @@ data class SingleSelectDropdownItem(
         bindHint(layout)
         bindEntries(layout)
         bindSelectedEntry(layout)
-        bindListeners(layout)
+        bindOnEntrySelected(layout)
     }
 
     override fun bind(previousItem: SingleSelectDropdownItem, layout: LayoutContainer) {
@@ -37,6 +36,10 @@ data class SingleSelectDropdownItem(
 
         if (selectedEntryIndex != previousItem.selectedEntryIndex) {
             bindSelectedEntry(layout)
+        }
+
+        if (onEntrySelected != previousItem.onEntrySelected) {
+            bindOnEntrySelected(layout)
         }
     }
 
@@ -61,7 +64,7 @@ data class SingleSelectDropdownItem(
         )
     }
 
-    private fun bindListeners(layout: LayoutContainer) {
+    private fun bindOnEntrySelected(layout: LayoutContainer) {
         layout.autocomplete_textview_single_select_dropdown.setOnItemClickListener { _, _, position, _ ->
             onEntrySelected.invoke(entries[position], position)
         }

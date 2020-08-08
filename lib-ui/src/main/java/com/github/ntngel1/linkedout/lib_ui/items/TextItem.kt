@@ -17,14 +17,13 @@ data class TextItem(
         get() = R.layout.item_text
 
     override fun bind(layout: LayoutContainer) {
-        super.bind(layout)
         val textView = layout.containerView as MaterialTextView
+
         bindText(textView)
         bindTextAppearance(textView)
     }
 
     override fun bind(previousItem: TextItem, layout: LayoutContainer) {
-        super.bind(previousItem, layout)
         val textView = layout.containerView as MaterialTextView
 
         if (text != previousItem.text) {

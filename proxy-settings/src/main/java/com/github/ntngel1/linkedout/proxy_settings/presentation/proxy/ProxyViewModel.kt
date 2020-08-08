@@ -151,6 +151,7 @@ class ProxyViewModel @ViewModelInject constructor(
         }
     }
 
+    // TODO: Validation
     fun onPingProxyClicked() = viewModelScope.launch {
         changeState { state ->
             state.copy(
