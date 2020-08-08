@@ -40,7 +40,7 @@ class TelegramClient @Inject constructor(
         onError(throwable)
     }
 
-    private val client = Client.create(updatesHandler, updateExceptionHandler, exceptionHandler)
+    val client: Client = Client.create(updatesHandler, updateExceptionHandler, exceptionHandler)
 
     private val initializedStateChannel = Channel<Unit>(capacity = Channel.CONFLATED)
     private val phoneNumberStateChannel = Channel<Unit>(capacity = Channel.CONFLATED)
@@ -49,13 +49,39 @@ class TelegramClient @Inject constructor(
         client.send(TdApi.SetLogVerbosityLevel(VERBOSITY_LEVEL_ERRORS), null)
     }
 
-    suspend fun send(query: TdApi.Function): TdApi.Object = suspendCoroutine { cont ->
+    suspend inline fun <reified T> send(query: TdApi.Function): T = suspendCoroutine { cont ->
         Timber.d("Received query = $query")
+
         client.send(query, { result ->
-            Timber.d("Received result from query = $query. Result = $result")
-            cont.resume(result)
+            Timber.d("Received result from query = ${query}\n Result = $result")
+            if (result is T) {
+                cont.resume(result)
+            } else {
+                val error = result as TdApi.Error
+                cont.resumeWithException(
+                    TelegramException(error.code, error.message)
+                )
+            }
         }, { throwable ->
-            Timber.e("Received exception from query = $query. Exception = $throwable")
+            Timber.e("Received exception from query = $query\n Exception = $throwable")
+            cont.resumeWithException(throwable)
+        })
+    }
+
+    suspend fun execute(query: TdApi.Function): Unit = suspendCoroutine { cont ->
+        Timber.d("Received query = $query")
+
+        client.send(query, { result ->
+            Timber.d("Received result from query = ${query}\n Result = $result")
+            if (result !is TdApi.Error) {
+                cont.resume(Unit)
+            } else {
+                cont.resumeWithException(
+                    TelegramException(result.code, result.message)
+                )
+            }
+        }, { throwable ->
+            Timber.e("Received exception from query = $query\n Exception = $throwable")
             cont.resumeWithException(throwable)
         })
     }

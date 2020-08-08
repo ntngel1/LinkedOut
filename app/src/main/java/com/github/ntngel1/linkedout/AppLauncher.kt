@@ -12,6 +12,6 @@ class AppLauncher @Inject constructor(
 
     fun coldStart() = runBlocking {
         telegramClient.waitForInitialization()
-        router.newRootScreen(Screens.ProxySettings)
+        router.newRootScreen(Screens.CreateProxy)
     }
 }

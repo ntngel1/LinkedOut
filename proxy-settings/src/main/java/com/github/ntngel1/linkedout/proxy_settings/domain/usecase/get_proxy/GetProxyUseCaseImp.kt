@@ -9,12 +9,7 @@ class GetProxyUseCaseImp @Inject constructor(
     private val proxyGateway: ProxyGateway
 ) : GetProxyUseCase {
 
-    override suspend fun invoke(id: Int): ProxyEntity {
-        return if (id == -1) {
-            ProxyEntity.Http(hostname = "", port = 80, username = "", password = "")
-        } else {
-            proxyGateway.get(id)
-                ?: throw NoSuchProxyException()
-        }
-    }
+    override suspend fun invoke(id: Int): ProxyEntity =
+        proxyGateway.get(id)
+            ?: throw NoSuchProxyException()
 }

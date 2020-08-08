@@ -38,7 +38,10 @@ class ProxyFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            viewModel.setup(proxyId = requireArguments().getInt(PROXY_ID_KEY))
+            val proxyId = requireArguments().getInt(PROXY_ID_KEY)
+            viewModel.setup(
+                proxyId = if (proxyId == 0) null else proxyId
+            )
         }
     }
 
@@ -199,7 +202,7 @@ class ProxyFragment : BaseFragment() {
     private fun makeProxyPingText(state: ProxyState): CharSequence = buildSpannedString {
         if (state.proxyPingLatencyMs != null && state.proxyPingLatencyMs > 0) {
             string(R.string.proxy_settings_proxy_ping_latency, state.proxyPingLatencyMs)
-                .let(::appendln)
+                .let(::append)
         }
 
         if (state.proxyPingStability != null) {
@@ -217,7 +220,7 @@ class ProxyFragment : BaseFragment() {
     companion object {
         private const val PROXY_ID_KEY = "proxy_id"
 
-        fun newInstance(proxyId: Int = -1) = ProxyFragment().apply {
+        fun newInstance(proxyId: Int? = null) = ProxyFragment().apply {
             arguments = bundleOf(PROXY_ID_KEY to proxyId)
         }
     }

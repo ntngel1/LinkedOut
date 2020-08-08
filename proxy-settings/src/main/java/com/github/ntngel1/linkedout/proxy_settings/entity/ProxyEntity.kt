@@ -14,28 +14,28 @@ sealed class ProxyEntity {
 
     data class Http(
         override val id: Int = -1,
-        override val hostname: String,
-        override val port: Int,
+        override val hostname: String = "",
+        override val port: Int = 80,
         override val isInternal: Boolean = false,
-        val username: String,
-        val password: String
+        val username: String = "",
+        val password: String = ""
     ) : ProxyEntity()
 
     data class Socks5(
         override val id: Int = -1,
-        override val hostname: String,
-        override val port: Int,
+        override val hostname: String = "",
+        override val port: Int = 80,
         override val isInternal: Boolean = false,
-        val username: String,
-        val password: String
+        val username: String = "",
+        val password: String = ""
     ) : ProxyEntity()
 
     data class MtProto(
         override val id: Int = -1,
-        override val hostname: String,
-        override val port: Int,
+        override val hostname: String = "",
+        override val port: Int = 80,
         override val isInternal: Boolean = false,
-        val secret: String
+        val secret: String = ""
     ) : ProxyEntity()
 
     fun copyIsInternal(isInternal: Boolean = this.isInternal): ProxyEntity =

@@ -13,13 +13,7 @@ class ProxyPingGatewayImp @Inject constructor(
 ) : ProxyPingGateway {
 
     override suspend fun ping(proxyId: Int): Long {
-        val result = telegramClient.send(TdApi.PingProxy(proxyId))
-
-        if (result is TdApi.Error) {
-            throw Exception("TDLib error: code = ${result.code}, message = ${result.message}")
-        }
-
-        val seconds = result as TdApi.Seconds
+        val seconds = telegramClient.send<TdApi.Seconds>(TdApi.PingProxy(proxyId))
         return (seconds.seconds * 1000.0).roundToLong()
     }
 }

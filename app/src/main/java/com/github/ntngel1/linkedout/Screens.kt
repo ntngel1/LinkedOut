@@ -10,7 +10,11 @@ object Screens {
         override fun getFragment() = AuthorizationFlowFragment()
     }
 
-    object ProxySettings : SupportAppScreen() {
+    object CreateProxy : SupportAppScreen() {
         override fun getFragment() = ProxyFragment.newInstance()
+    }
+
+    data class EditProxy(val proxyId: Int) : SupportAppScreen() {
+        override fun getFragment() = ProxyFragment.newInstance(proxyId)
     }
 }

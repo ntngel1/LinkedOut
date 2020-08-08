@@ -23,7 +23,7 @@ class ProxyViewModel @ViewModelInject constructor(
         get() = _state.value!!
     val state: LiveData<ProxyState> = _state
 
-    fun setup(proxyId: Int) {
+    fun setup(proxyId: Int?) {
         changeState { state ->
             state.copy(proxyId = proxyId)
         }
@@ -32,7 +32,11 @@ class ProxyViewModel @ViewModelInject constructor(
     }
 
     private fun loadProxy() = viewModelScope.launch {
-        val proxy = getProxy(currentState.proxyId)
+        val proxy = currentState.proxyId?.let { proxyId ->
+            // getting existing proxy
+            getProxy(proxyId)
+        } ?: ProxyEntity.Http() // else creating new proxy
+
         val proxyType = when (proxy) {
             is ProxyEntity.Http -> ProxyType.HTTP
             is ProxyEntity.Socks5 -> ProxyType.SOCKS5
@@ -73,6 +77,7 @@ class ProxyViewModel @ViewModelInject constructor(
                 isUsernameAndPasswordInputsVisible = shouldShowUsernameAndPasswordInputs(proxyType),
                 isSecretInputVisible = shouldShowSecretInput(proxyType),
                 isPingProxyButtonVisible = true,
+                isProxyPingVisible = false,
                 isSaveButtonVisible = state.shouldShowSaveButton(newProxyType = proxyType)
             )
         }
@@ -84,6 +89,7 @@ class ProxyViewModel @ViewModelInject constructor(
             state.copy(
                 newProxyHostname = hostname,
                 hostnameCursorPosition = cursorPosition,
+                isProxyPingVisible = false,
                 isSaveButtonVisible = state.shouldShowSaveButton(newProxyHostname = hostname)
             )
         }
@@ -102,6 +108,7 @@ class ProxyViewModel @ViewModelInject constructor(
         changeState { state ->
             state.copy(
                 newProxyPort = normalizedPort,
+                isProxyPingVisible = false,
                 isSaveButtonVisible = state.shouldShowSaveButton(newProxyPort = normalizedPort),
                 portCursorPosition = cursorPosition
             )
@@ -113,6 +120,7 @@ class ProxyViewModel @ViewModelInject constructor(
         changeState { state ->
             state.copy(
                 newProxyUsername = username,
+                isProxyPingVisible = false,
                 isSaveButtonVisible = state.shouldShowSaveButton(newProxyUsername = username),
                 usernameCursorPosition = cursorPosition
             )
@@ -124,6 +132,7 @@ class ProxyViewModel @ViewModelInject constructor(
         changeState { state ->
             state.copy(
                 newProxyPassword = password,
+                isProxyPingVisible = false,
                 isSaveButtonVisible = state.shouldShowSaveButton(newProxyPassword = password),
                 passwordCursorPosition = cursorPosition
             )
@@ -135,6 +144,7 @@ class ProxyViewModel @ViewModelInject constructor(
         changeState { state ->
             state.copy(
                 newProxySecret = secret,
+                isProxyPingVisible = false,
                 isSaveButtonVisible = state.shouldShowSaveButton(newProxySecret = secret),
                 secretCursorPosition = cursorPosition
             )

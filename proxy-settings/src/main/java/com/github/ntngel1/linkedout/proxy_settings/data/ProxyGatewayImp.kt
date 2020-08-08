@@ -3,7 +3,6 @@ package com.github.ntngel1.linkedout.proxy_settings.data
 import com.github.ntngel1.linkedout.lib_telegram.TelegramClient
 import com.github.ntngel1.linkedout.proxy_settings.domain.gateway.ProxyGateway
 import com.github.ntngel1.linkedout.proxy_settings.entity.ProxyEntity
-import kotlinx.coroutines.delay
 import org.drinkless.td.libcore.telegram.TdApi
 import javax.inject.Inject
 
@@ -34,34 +33,20 @@ class ProxyGatewayImp @Inject constructor(
             proxyType
         )
 
-        val result = telegramClient.send(query)
-        if (result is TdApi.Error) {
-            throw Exception("TDLib error: code = ${result.code}, message = ${result.message}")
-        }
-
-        return (result as TdApi.Proxy).toProxyEntity()
+        return telegramClient.send<TdApi.Proxy>(query)
+            .toProxyEntity()
     }
 
     override suspend fun get(id: Int): ProxyEntity? {
-        val result = telegramClient.send(TdApi.GetProxies())
-        if (result is TdApi.Error) {
-            throw Exception("TDLib error: code = ${result.code}, message = ${result.message}")
-        }
-
-        val proxies = result as TdApi.Proxies
-        return proxies.proxies
+        return telegramClient.send<TdApi.Proxies>(TdApi.GetProxies())
+            .proxies
             .find { it.id == id }
             ?.toProxyEntity()
     }
 
     override suspend fun getAll(): List<ProxyEntity> {
-        val result = telegramClient.send(TdApi.GetProxies())
-        if (result is TdApi.Error) {
-            throw Exception("TDLib error: code = ${result.code}, message = ${result.message}")
-        }
-
-        val proxies = result as TdApi.Proxies
-        return proxies.proxies
+        return telegramClient.send<TdApi.Proxies>(TdApi.GetProxies())
+            .proxies
             .map { it.toProxyEntity() }
     }
 
@@ -70,10 +55,7 @@ class ProxyGatewayImp @Inject constructor(
     }
 
     override suspend fun remove(id: Int) {
-        val result = telegramClient.send(TdApi.RemoveProxy(id))
-        if (result is TdApi.Error) {
-            throw Exception("TDLib error: code = ${result.code}, message = ${result.message}")
-        }
+        telegramClient.execute(TdApi.RemoveProxy(id))
     }
 
     private fun TdApi.Proxy.toProxyEntity(): ProxyEntity =

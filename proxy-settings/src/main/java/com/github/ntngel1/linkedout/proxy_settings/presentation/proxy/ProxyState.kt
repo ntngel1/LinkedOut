@@ -5,8 +5,6 @@ import com.github.ntngel1.linkedout.proxy_settings.presentation.proxy.enums.Prox
 
 // TODO: Maybe we can have just only cursorPosition field that can be used across all inputs?
 data class ProxyState(
-    val proxyId: Int = -1,
-
     /** [isUsernameAndPasswordInputsVisible] is true if [ProxyType] == [ProxyType.HTTP] || [ProxyType.SOCKS5] */
     val isUsernameAndPasswordInputsVisible: Boolean = false,
     /** [isSecretInputVisible] is true if [ProxyType] == [ProxyType.MT_PROTO] */
@@ -18,6 +16,9 @@ data class ProxyState(
 
     val proxyPingLatencyMs: Long? = null,
     val proxyPingStability: ProxyPingEntity.Stability? = null,
+
+    /** if null, then we're creating new proxy, else we're editing existing one */
+    val proxyId: Int? = null,
 
     // Already saved proxy configuration
     val savedProxyType: ProxyType? = null,
