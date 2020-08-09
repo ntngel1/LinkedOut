@@ -1,12 +1,10 @@
 package com.github.ntngel1.linkedout.lib_ui.items.text_input
 
-import android.text.Editable
 import android.text.InputType
-import android.text.TextWatcher
 import com.github.ntngel1.linkedout.lib_delegate_adapter.Callback2
 import com.github.ntngel1.linkedout.lib_delegate_adapter.core.Item
-import com.github.ntngel1.linkedout.lib_extensions.hideKeyboard
-import com.github.ntngel1.linkedout.lib_extensions.text
+import com.github.ntngel1.linkedout.lib_utils.hideKeyboard
+import com.github.ntngel1.linkedout.lib_utils.text
 import com.github.ntngel1.linkedout.lib_ui.ExtendedTextInputEditText
 import com.github.ntngel1.linkedout.lib_ui.R
 import kotlinx.android.extensions.LayoutContainer

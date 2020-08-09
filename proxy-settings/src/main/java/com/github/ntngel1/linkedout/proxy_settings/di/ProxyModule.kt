@@ -11,27 +11,31 @@ import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.get_proxy.GetP
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.components.FragmentComponent
 
 @Module
-@InstallIn(ApplicationComponent::class)
-abstract class ProxySettingsModule {
+@InstallIn(ActivityRetainedComponent::class)
+abstract class ProxyModule {
 
     @Binds
-    abstract fun bindProxySettingsRepository(
-        proxySettingsRepositoryImp: ProxyGatewayImp
+    abstract fun bindProxyGateway(
+        proxyGatewayImp: ProxyGatewayImp
     ): ProxyGateway
 
     @Binds
-    abstract fun bindGetProxySettingsUseCase(
-        getProxySettingsUseCaseImp: GetProxyUseCaseImp
+    abstract fun bindGetProxyUseCase(
+        getProxyUseCaseImp: GetProxyUseCaseImp
     ): GetProxyUseCase
 
     @Binds
-    abstract fun bindPingRepository(pingRepositoryImp: ProxyPingGatewayImp): ProxyPingGateway
+    abstract fun bindProxyPingGateway(
+        proxyPingGatewayImp: ProxyPingGatewayImp
+    ): ProxyPingGateway
 
     @Binds
-    abstract fun bindCheckConnectionQualityUseCase(
-        checkConnectionQualityUseCaseImp: PingProxyUseCaseImp
+    abstract fun bindPingProxyUseCase(
+        pingProxyUseCaseImp: PingProxyUseCaseImp
     ): PingProxyUseCase
 }

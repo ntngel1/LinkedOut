@@ -1,10 +1,11 @@
 package com.github.ntngel1.linkedout.lib_telegram
 
 import android.content.Context
-import com.github.ntngel1.linkedout.lib_extensions.DeviceSpecsUtil
+import com.github.ntngel1.linkedout.lib_utils.DeviceSpecsUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.runBlocking
 import org.drinkless.td.libcore.BuildConfig
 import org.drinkless.td.libcore.telegram.Client
 import org.drinkless.td.libcore.telegram.TdApi
@@ -12,6 +13,7 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -26,7 +28,10 @@ import kotlin.coroutines.suspendCoroutine
 @Singleton
 class TelegramClient @Inject constructor(
     @ApplicationContext private val context: Context
-) {
+) : CoroutineScope {
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + SupervisorJob()
 
     private val updatesHandler = Client.ResultHandler { result ->
         onUpdateReceived(result as TdApi.Update)
@@ -41,9 +46,7 @@ class TelegramClient @Inject constructor(
     }
 
     val client: Client = Client.create(updatesHandler, updateExceptionHandler, exceptionHandler)
-
-    private val initializedStateChannel = Channel<Unit>(capacity = Channel.CONFLATED)
-    private val phoneNumberStateChannel = Channel<Unit>(capacity = Channel.CONFLATED)
+    val authorizationStatesChannel = BroadcastChannel<TdApi.AuthorizationState>(Channel.CONFLATED)
 
     init {
         client.send(TdApi.SetLogVerbosityLevel(VERBOSITY_LEVEL_ERRORS), null)
@@ -86,14 +89,6 @@ class TelegramClient @Inject constructor(
         })
     }
 
-    suspend fun waitForInitialization() {
-        initializedStateChannel.receive()
-    }
-
-    suspend fun waitForPhoneNumber() {
-        phoneNumberStateChannel.receive()
-    }
-
     private fun onUpdateReceived(update: TdApi.Update) {
         Timber.d("Received update = $update")
         when (update) {
@@ -101,30 +96,15 @@ class TelegramClient @Inject constructor(
         }
     }
 
-    private fun handleAuthorizationStateUpdate(update: TdApi.UpdateAuthorizationState) {
-        if (update.authorizationState !is TdApi.AuthorizationStateWaitTdlibParameters &&
-            update.authorizationState !is TdApi.AuthorizationStateWaitEncryptionKey
-        ) {
-            runBlocking { initializedStateChannel.send(Unit) }
-        }
-
+    private fun handleAuthorizationStateUpdate(update: TdApi.UpdateAuthorizationState) = launch {
+        authorizationStatesChannel.send(update.authorizationState)
         when (update.authorizationState) {
             is TdApi.AuthorizationStateWaitTdlibParameters -> client.send(
                 makeSetTdLibParametersRequest(),
                 null
             )
             is TdApi.AuthorizationStateWaitEncryptionKey -> {
-                client.send(TdApi.SetDatabaseEncryptionKey(byteArrayOf())) {
-                    client.send(
-                        TdApi.CheckDatabaseEncryptionKey(
-                            byteArrayOf()
-                        ),
-                        null
-                    )
-                }
-            }
-            is TdApi.AuthorizationStateWaitPhoneNumber -> runBlocking {
-                phoneNumberStateChannel.send(Unit)
+                client.send(TdApi.SetDatabaseEncryptionKey(byteArrayOf()), null)
             }
         }
     }

@@ -10,11 +10,11 @@ import com.github.ntngel1.linkedout.lib_delegate_adapter.callback
 import com.github.ntngel1.linkedout.lib_delegate_adapter.callback1
 import com.github.ntngel1.linkedout.lib_delegate_adapter.callback2
 import com.github.ntngel1.linkedout.lib_delegate_adapter.item_decorations.SpacingItemDecoration
-import com.github.ntngel1.linkedout.lib_delegate_adapter.render
-import com.github.ntngel1.linkedout.lib_extensions.BaseFragment
-import com.github.ntngel1.linkedout.lib_extensions.dp
-import com.github.ntngel1.linkedout.lib_extensions.attributeResourceId
-import com.github.ntngel1.linkedout.lib_extensions.string
+import com.github.ntngel1.linkedout.lib_delegate_adapter.renderState
+import com.github.ntngel1.linkedout.lib_utils.BaseFragment
+import com.github.ntngel1.linkedout.lib_utils.dp
+import com.github.ntngel1.linkedout.lib_utils.attributeResourceId
+import com.github.ntngel1.linkedout.lib_utils.string
 import com.github.ntngel1.linkedout.lib_ui.items.*
 import com.github.ntngel1.linkedout.lib_ui.items.text_input.TextInputItem
 import com.github.ntngel1.linkedout.proxy_settings.R
@@ -50,7 +50,7 @@ class ProxyFragment : BaseFragment() {
     }
 
     private fun setupViewModelObservers() {
-        viewModel.state.observe(::render)
+        viewModel.state.observe(::renderState)
     }
 
     private fun setupRecyclerView() {
@@ -58,9 +58,9 @@ class ProxyFragment : BaseFragment() {
         recyclerview_proxy_settings.addItemDecoration(spacingItemDecoration)
     }
 
-    private fun render(
+    private fun renderState(
         state: ProxyState
-    ) = recyclerview_proxy_settings.render(spacingItemDecoration = spacingItemDecoration) {
+    ) = recyclerview_proxy_settings.renderState(spacingItemDecoration = spacingItemDecoration) {
         state.newProxyType?.let { proxyType ->
             SingleSelectDropdownItem(
                 id = "proxy_type_dropdown",

@@ -12,7 +12,7 @@ import android.graphics.Paint
 import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.ntngel1.linkedout.lib_extensions.dp
+import com.github.ntngel1.linkedout.lib_utils.dp
 
 class DividerItemDecoration(
     @ColorInt

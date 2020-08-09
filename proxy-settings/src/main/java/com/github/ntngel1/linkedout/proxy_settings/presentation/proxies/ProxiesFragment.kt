@@ -1,6 +1,6 @@
 package com.github.ntngel1.linkedout.proxy_settings.presentation.proxies
 
-import com.github.ntngel1.linkedout.lib_extensions.BaseFragment
+import com.github.ntngel1.linkedout.lib_utils.BaseFragment
 import com.github.ntngel1.linkedout.proxy_settings.R
 import dagger.hilt.android.AndroidEntryPoint
 

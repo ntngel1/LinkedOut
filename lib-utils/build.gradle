@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 29
@@ -22,5 +23,12 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation libs.stdlib
+
     implementation libs.appcompat
+
+    implementation libs.hilt
+    kapt libs.hilt_compiler
+
+    implementation libs.hilt_viewmodel
+    kapt libs.hilt_viewmodel_compiler
 }

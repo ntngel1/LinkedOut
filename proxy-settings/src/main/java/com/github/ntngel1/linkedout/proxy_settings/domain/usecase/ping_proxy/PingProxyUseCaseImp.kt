@@ -4,6 +4,7 @@ import com.github.ntngel1.linkedout.proxy_settings.domain.gateway.ProxyGateway
 import com.github.ntngel1.linkedout.proxy_settings.domain.gateway.ProxyPingGateway
 import com.github.ntngel1.linkedout.proxy_settings.entity.ProxyEntity
 import com.github.ntngel1.linkedout.proxy_settings.entity.ProxyPingEntity
+import com.github.ntngel1.linkedout.proxy_settings.entity.copyIsInternal
 import javax.inject.Inject
 
 // TODO: here we're saving proxy to gateway and then removing it, but what if we cancel this usecase

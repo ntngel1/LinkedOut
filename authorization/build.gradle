@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 29
@@ -16,12 +18,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation libs.stdlib
-    implementation libs.core_ktx
-    implementation libs.appcompat
+
     implementation libs.utils
+    implementation libs.telegram
+
+    implementation libs.material
+    implementation libs.appcompat
+
+    implementation libs.core_ktx
+    implementation libs.fragment_ktx
+    implementation libs.lifecycle_viewmodel_ktx
+    implementation libs.cicerone
+
+    implementation libs.hilt
+    kapt libs.hilt_compiler
+
+    implementation libs.hilt_viewmodel
+    kapt libs.hilt_viewmodel_compiler
 }

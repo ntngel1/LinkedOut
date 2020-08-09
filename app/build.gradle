@@ -22,6 +22,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -46,9 +50,11 @@ dependencies {
     implementation libs.gson
     implementation libs.okhttp
     implementation libs.timber
+    implementation libs.coroutines
 
     implementation libs.hilt
-    implementation libs.hilt_viewmodel
     kapt libs.hilt_compiler
+
+    implementation libs.hilt_viewmodel
     kapt libs.hilt_viewmodel_compiler
 }

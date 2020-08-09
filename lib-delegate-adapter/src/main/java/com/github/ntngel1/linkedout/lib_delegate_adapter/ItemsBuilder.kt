@@ -82,7 +82,7 @@ class ItemsBuilder(
     }
 }
 
-fun RecyclerView.render(
+fun RecyclerView.renderState(
     dividerItemDecoration: DividerItemDecoration? = null,
     spacingItemDecoration: SpacingItemDecoration? = null,
     builder: ItemsBuilder.() -> Unit

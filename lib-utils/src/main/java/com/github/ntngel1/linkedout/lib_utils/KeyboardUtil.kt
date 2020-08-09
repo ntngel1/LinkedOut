@@ -1,4 +1,4 @@
-package com.github.ntngel1.linkedout.lib_extensions
+package com.github.ntngel1.linkedout.lib_utils
 
 import android.app.Activity
 import android.content.Context
