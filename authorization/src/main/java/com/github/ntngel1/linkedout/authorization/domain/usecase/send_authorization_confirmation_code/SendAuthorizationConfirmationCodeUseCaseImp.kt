@@ -9,6 +9,6 @@ class SendAuthorizationConfirmationCodeUseCaseImp @Inject constructor(
 ) : SendAuthorizationConfirmationCodeUseCase {
 
     override suspend fun invoke(phoneNumber: String) {
-        authorizationConfirmationCodeGateway.send(phoneNumber)
+        authorizationConfirmationCodeGateway.sendConfirmationCode(phoneNumber)
     }
 }

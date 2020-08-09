@@ -1,5 +1,6 @@
 package com.github.ntngel1.linkedout.authorization.domain.gateway
 
 interface AuthorizationConfirmationCodeGateway {
-    suspend fun send(phoneNumber: String)
+    suspend fun sendConfirmationCode(phoneNumber: String)
+    suspend fun checkConfirmationCode(confirmationCode: String)
 }

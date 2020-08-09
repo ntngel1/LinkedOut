@@ -39,6 +39,9 @@ dependencies {
     implementation libs.lifecycle_viewmodel_ktx
     implementation libs.cicerone
 
+    implementation libs.room
+    kapt libs.room_compiler
+
     implementation libs.hilt
     kapt libs.hilt_compiler
 

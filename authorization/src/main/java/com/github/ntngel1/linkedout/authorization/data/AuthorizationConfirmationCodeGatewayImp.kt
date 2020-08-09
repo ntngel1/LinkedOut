@@ -9,7 +9,7 @@ class AuthorizationConfirmationCodeGatewayImp @Inject constructor(
     private val telegramClient: TelegramClient
 ) : AuthorizationConfirmationCodeGateway {
 
-    override suspend fun send(phoneNumber: String) {
+    override suspend fun sendConfirmationCode(phoneNumber: String) {
         val query = TdApi.SetAuthenticationPhoneNumber(
             phoneNumber,
             // TODO AllowFlashCall and eval isCurrentPhoneNumber
@@ -21,5 +21,9 @@ class AuthorizationConfirmationCodeGatewayImp @Inject constructor(
         )
 
         telegramClient.execute(query)
+    }
+
+    override suspend fun checkConfirmationCode(confirmationCode: String) {
+        TODO()
     }
 }
