@@ -24,6 +24,7 @@ class AuthorizationConfirmationCodeGatewayImp @Inject constructor(
     }
 
     override suspend fun checkConfirmationCode(confirmationCode: String) {
-        TODO()
+        val query = TdApi.CheckAuthenticationCode(confirmationCode)
+        telegramClient.execute(query)
     }
 }

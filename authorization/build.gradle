@@ -37,6 +37,8 @@ dependencies {
     implementation libs.core_ktx
     implementation libs.fragment_ktx
     implementation libs.lifecycle_viewmodel_ktx
+
+    implementation libs.coroutines
     implementation libs.cicerone
 
     implementation libs.room

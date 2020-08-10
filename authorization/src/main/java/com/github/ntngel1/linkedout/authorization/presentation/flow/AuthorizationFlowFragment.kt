@@ -1,8 +1,9 @@
-package com.github.ntngel1.linkedout.authorization
+package com.github.ntngel1.linkedout.authorization.presentation.flow
 
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import com.github.ntngel1.linkedout.authorization.R
 import com.github.ntngel1.linkedout.lib_utils.BaseFragment
 import kotlinx.android.synthetic.main.fragment_authorization.*
 
@@ -18,7 +19,8 @@ class AuthorizationFlowFragment : BaseFragment() {
 
     companion object {
         private const val TITLE_KEY = "title"
-        fun newInstance(title: String) = AuthorizationFlowFragment().apply {
+        fun newInstance(title: String) = AuthorizationFlowFragment()
+            .apply {
             arguments = bundleOf(TITLE_KEY to title)
         }
     }

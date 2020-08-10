@@ -1,7 +1,0 @@
-package com.github.ntngel1.linkedout.authorization.domain.usecase.get_recent_sent_authorization_confirmation_code_info
-
-import com.github.ntngel1.linkedout.authorization.entity.SentAuthorizationConfirmationCodeInfoEntity
-
-interface GetRecentSentAuthorizationConfirmationCodeInfoUseCase {
-    suspend operator fun invoke(): SentAuthorizationConfirmationCodeInfoEntity
-}

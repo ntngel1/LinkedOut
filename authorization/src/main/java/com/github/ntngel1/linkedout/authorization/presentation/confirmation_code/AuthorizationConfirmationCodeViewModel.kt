@@ -8,7 +8,7 @@ class AuthorizationConfirmationCodeViewModel @ViewModelInject constructor(
     private val checkAuthorizationConfirmationCode: CheckAuthorizationConfirmationCodeUseCase
 ) : MviViewModel<AuthorizationConfirmationCodeState, AuthorizationConfirmationCodeEvent>() {
 
-    init {
+    fun setup(phoneNumber: String, confirmationCodeLength: Int) {
 
     }
 }

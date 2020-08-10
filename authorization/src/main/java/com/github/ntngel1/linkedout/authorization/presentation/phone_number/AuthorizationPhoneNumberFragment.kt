@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.github.ntngel1.linkedout.authorization.AuthorizationFlowFragment
+import com.github.ntngel1.linkedout.authorization.presentation.flow.AuthorizationFlowFragment
 import com.github.ntngel1.linkedout.authorization.R
 import com.github.ntngel1.linkedout.lib_utils.BaseFragment
 import com.github.ntngel1.linkedout.lib_utils.text

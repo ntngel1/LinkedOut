@@ -1,6 +1,6 @@
 package com.github.ntngel1.linkedout
 
-import com.github.ntngel1.linkedout.authorization.AuthorizationFlowFragment
+import com.github.ntngel1.linkedout.authorization.presentation.flow.AuthorizationFlowFragment
 import com.github.ntngel1.linkedout.authorization.presentation.phone_number.AuthorizationPhoneNumberFragment
 import com.github.ntngel1.linkedout.proxy_settings.presentation.proxy.ProxyFragment
 import ru.terrakok.cicerone.android.support.SupportAppScreen
@@ -8,7 +8,8 @@ import ru.terrakok.cicerone.android.support.SupportAppScreen
 object Screens {
 
     object AuthorizationFlow : SupportAppScreen() {
-        override fun getFragment() = AuthorizationFlowFragment()
+        override fun getFragment() =
+            AuthorizationFlowFragment()
     }
 
     object AuthorizationPhoneNumber : SupportAppScreen() {
