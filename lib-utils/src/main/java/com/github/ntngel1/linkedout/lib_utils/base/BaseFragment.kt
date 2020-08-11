@@ -1,4 +1,4 @@
-package com.github.ntngel1.linkedout.lib_utils
+package com.github.ntngel1.linkedout.lib_utils.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -5,7 +5,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.github.ntngel1.linkedout.authorization.R
-import com.github.ntngel1.linkedout.lib_utils.BaseFragment
+import com.github.ntngel1.linkedout.lib_utils.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

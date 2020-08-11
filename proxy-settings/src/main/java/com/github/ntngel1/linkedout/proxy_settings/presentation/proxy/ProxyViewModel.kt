@@ -2,7 +2,7 @@ package com.github.ntngel1.linkedout.proxy_settings.presentation.proxy
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
-import com.github.ntngel1.linkedout.lib_utils.MviViewModel
+import com.github.ntngel1.linkedout.lib_utils.base.MviViewModel
 import com.github.ntngel1.linkedout.lib_utils.skipWhitespaces
 import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.get_proxy.GetProxyUseCase
 import com.github.ntngel1.linkedout.proxy_settings.domain.usecase.ping_proxy.PingProxyUseCase

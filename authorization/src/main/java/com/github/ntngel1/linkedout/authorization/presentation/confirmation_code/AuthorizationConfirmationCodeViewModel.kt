@@ -2,7 +2,7 @@ package com.github.ntngel1.linkedout.authorization.presentation.confirmation_cod
 
 import androidx.hilt.lifecycle.ViewModelInject
 import com.github.ntngel1.linkedout.authorization.domain.usecase.check_authorization_confirmation_code.CheckAuthorizationConfirmationCodeUseCase
-import com.github.ntngel1.linkedout.lib_utils.MviViewModel
+import com.github.ntngel1.linkedout.lib_utils.base.MviViewModel
 
 class AuthorizationConfirmationCodeViewModel @ViewModelInject constructor(
     private val checkAuthorizationConfirmationCode: CheckAuthorizationConfirmationCodeUseCase

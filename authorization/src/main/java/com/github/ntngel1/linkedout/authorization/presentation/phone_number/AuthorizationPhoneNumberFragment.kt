@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.github.ntngel1.linkedout.authorization.presentation.flow.AuthorizationFlowFragment
 import com.github.ntngel1.linkedout.authorization.R
-import com.github.ntngel1.linkedout.lib_utils.BaseFragment
+import com.github.ntngel1.linkedout.lib_utils.base.BaseFragment
 import com.github.ntngel1.linkedout.lib_utils.text
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_authorization_phone_number.*
@@ -40,11 +40,7 @@ class AuthorizationPhoneNumberFragment : BaseFragment() {
 
     private fun handleEvent(event: AuthorizationPhoneNumberEvent) = when (event) {
         is AuthorizationPhoneNumberEvent.ShowAuthorizationConfirmationCodeScreen -> {
-            router.navigateTo(object : SupportAppScreen() {
-                override fun getFragment(): Fragment? {
-                    return AuthorizationFlowFragment.newInstance("SENT CODE")
-                }
-            })
+            // TODO
         }
     }
 }

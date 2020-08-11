@@ -1,9 +1,10 @@
-package com.github.ntngel1.linkedout.lib_utils
+package com.github.ntngel1.linkedout.lib_utils.base
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.github.ntngel1.linkedout.lib_utils.SingleLiveEvent
 
 /**
  * Base class for MVI-like ViewModel.
@@ -16,7 +17,8 @@ abstract class MviViewModel<S : Any, E : Any> : ViewModel() {
     private val _state = MutableLiveData<S>()
     val state: LiveData<S> = _state
 
-    private val _events = SingleLiveEvent<E>()
+    private val _events =
+        SingleLiveEvent<E>()
     val events: LiveData<E> = _events
 
     protected val currentState: S

@@ -11,7 +11,7 @@ import com.github.ntngel1.linkedout.lib_delegate_adapter.callback1
 import com.github.ntngel1.linkedout.lib_delegate_adapter.callback2
 import com.github.ntngel1.linkedout.lib_delegate_adapter.item_decorations.SpacingItemDecoration
 import com.github.ntngel1.linkedout.lib_delegate_adapter.renderState
-import com.github.ntngel1.linkedout.lib_utils.BaseFragment
+import com.github.ntngel1.linkedout.lib_utils.base.BaseFragment
 import com.github.ntngel1.linkedout.lib_utils.dp
 import com.github.ntngel1.linkedout.lib_utils.attributeResourceId
 import com.github.ntngel1.linkedout.lib_utils.string
